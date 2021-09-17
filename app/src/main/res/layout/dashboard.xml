@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+
+
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            >
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/app_bar"
+            android:background="@color/white"
+            android:fitsSystemWindows="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/refresh"
+                        android:visibility="gone"
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="@dimen/_23sdp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="start"
+                        android:background="@drawable/ic_autorenew_white_24dp"
+                        android:backgroundTint="@color/colorPrimary" />
+
+
+                    <TextView
+                        android:id="@+id/title_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="TNSEC"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/log_out"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="15dp"
+                        android:adjustViewBounds="true"
+                        android:onClick="@{()-> activity.logout()}"
+                        android:background="@drawable/ic_exit_to_app_black_24dp"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:scaleType="centerInside" />
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/padding"
+    android:id="@+id/details_layout"
+    android:layout_below="@+id/app_bar"
+    android:layout_above="@+id/text">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+            <RelativeLayout
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:maxHeight="200dp"
+                android:id="@+id/relative2"
+                android:background="@drawable/button_background5">
+
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:maxHeight="200dp"
+                    android:background="@drawable/button_background2"
+                    android:id="@+id/left2">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ro Name"
+                        android:layout_centerVertical="true"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/name_h"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="bold"/>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/left2">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ro Name"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/name"
+                        android:padding="@dimen/_8sdp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="bold"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/cornered_bg_colored_circle_top"
+                android:layout_below="@+id/relative2">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_layout"
+                    android:paddingBottom="@dimen/_20sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center">
+
+                    <RelativeLayout
+                        android:id="@+id/type_spinner_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_marginLeft="@dimen/margin_left_20dp"
+                        android:layout_marginTop="@dimen/_40sdp"
+                        android:layout_marginRight="@dimen/margin_left_20dp"
+                        android:background="@drawable/rectangle_box"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/type_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="10dp"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/activity_spinner_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_below="@+id/type_spinner_layout"
+                        android:layout_marginLeft="@dimen/margin_left_20dp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/margin_left_20dp"
+                        android:background="@drawable/rectangle_box"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/activity_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GO"
+                        android:background="@drawable/circle_shadow"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/activity_spinner_layout"
+                        android:id="@+id/go"
+                        android:layout_marginTop="@dimen/_30sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="bold"/>
+
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:padding="15dp"
+                android:text="Sofware Designed &amp; Developed by NIC"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="italic"
+                android:visibility="gone"
+                style="@string/font_circular_medium" />
+
+        </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.nic.tnsecPollingPersonnel.activity.Dashboard" />
+    </data>
+</layout>
