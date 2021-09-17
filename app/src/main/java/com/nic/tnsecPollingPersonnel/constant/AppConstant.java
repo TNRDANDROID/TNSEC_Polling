@@ -7,6 +7,7 @@ public class AppConstant {
     public static final String PREF_NAME = "NIC";
     public static String KEY_SERVICE_ID = "service_id";
     public static String KEY_APP_CODE = "appcode";
+    public static String KEY_APP_ID = "app_id";
     public static String JSON_DATA = "JSON_DATA";
     public static String KEY_VERSION_CHECK= "version_check";
     public static String DATA_CONTENT = "data_content";
@@ -30,18 +31,25 @@ public class AppConstant {
     public static String PV_NAME = "pvname";
     public static String DESIG_NAME = "desig_name";
     public static String NAME = "name";
+    public static String RO_ZONE_ID = "ro_zone_id";
+    public static String ZONAL_PARTY_NAME = "zonal_party_name";
+    public static String ZP_ACTIVITY_TYPE= "zp_activity_type";
+    public static String ZP_ACTIVITY= "zp_activity";
+    public static String ZP_POLLING_BOOTH_LIST= "zp_polling_booth_list";
     public static String LEVELS = "levels";
-    public static String IMAGE = "image";
-    public static String DESCRIPTION = "image_description";
-    public static String KEY_LATITUDE = "lat";
-    public static String KEY_LONGITUDE = "long";
-    public static String KEY_PURPOSE = "purpose";
-    public static String KEY_PHOTO_ID = "id";
-    public static String KEY_EMP_TYPE = "empcode_type";
-    public static String KEY_EMP_DESCRIPTION = "empcode_description";
     public static String KEY_SERVER_DATA = "emp_entry_list";
-    public static String KEY_EMP_PHOTO = "KEY_EMP_PHOTO";
-    public static String KEY_EMP_ID = "pp_id";
-    public static String KEY_IMAGE = "KEY_IMAGE";
+
+    public static  String ACTIVITY_TYPE = "activity_type";
+    public static  String ACTIVITY_TYPE_DESC = "activity_type_desc";
+    public static  String DISPLAY_ORDER = "display_order";
+    public static  String ACTIVITY_ID = "activity_id";
+    public static  String ACTIVITY_DESCRIPTION = "activity_description";
+    public static  String ACTIVITY_BY = "activity_by";
+    public static  String POLLING_STATION_NO= "polling_station_no";
+    public static  String POLLING_BOOTH_NAME = "polling_booth_name";
+    public static  String LLPOLLING_BOOTH_NAME = "llpolling_booth_name";
+    public static  String SERVICE_ID = "service_id";
+    public static  String POLLING_BOOTH_ID = "polling_booth_id";
+    public static  String ACTIVITY_REMARK = "activity_remark";
 
 }

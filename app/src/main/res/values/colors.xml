@@ -47,7 +47,35 @@
 
     <color name="white">#ffffff</color>
 
-
+ <color name="scheduled">#0077A2</color>
+ <color name="terminated">#12B9CB</color>
+ <color name="failed">#4F99D3</color>
+ <color name="failed_lite">#A9FF9130</color>
+ <color name="completed">#07C796</color>
+ <color name="completed_lite">#9C07C796</color>
+ <color name="canceled">#ED5959</color>
+ <color name="canceled_lite">#A6ED5959</color>
+ <color name="in_progress">#6E4486</color>
+ <color name="calender">#0077A2</color>
+ <color name="appointment">#FF9130</color>
+ <color name="patientIntake">#07C796</color>
+ <color name="chargeCapture">#ED5959</color>
+ <color name="messages">#6E4486</color>
+ <color name="Reports">#AEB02B</color>
+ <color name="calenderLite">#d259b4d6</color>
+ <color name="appointmentLite">#818B36</color>
+ <color name="patientIntakeLite">#d059d6b5</color>
+ <color name="chargeCaptureLite">#d2e47373</color>
+ <color name="messagesLite">#d0ab5cd9</color>
+ <color name="ReportsLite">#d4d9da59</color>
+ <color name="headColor">#d0026965</color>
+ <color name="Red">#FF0000</color>
+ <color name="Red1">#b90b0b</color>
+ <color name="Red2">#4DB90B0B</color>
+ <color name="Red_transparent">#2db90b0b</color>
+ <color name="Green">#00FF00</color>
+ <color name="accept">#109610</color>
+ <color name="Green2">#4D109610</color>
     <!-- dots active colors -->
 
 

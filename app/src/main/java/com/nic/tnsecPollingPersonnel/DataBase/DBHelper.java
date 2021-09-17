@@ -6,13 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "electionproject";
+    private static final String DATABASE_NAME = "tnsecpollingpersonnel";
     private static final int DATABASE_VERSION = 1;
 
 
-    public static final String RO_USER_TABLE_NAME = "RO_UserTable";
-    public static final String POLLING_STATION_IMAGE = "Polling_Station_Image";
-    public static final String SAVE_EMP_DETAILS = "SaveEmpDetails";
+    public static final String ACTIVITY_TYPE_LIST = "activity_type_list";
+    public static final String ACTIVITY_LIST = "activity_list";
+    public static final String POLLING_STATION_LIST = "polling_station_list";
+    public static final String SAVE_DATA = "save_data";
     private Context context;
 
     public DBHelper(Context context) {
@@ -26,33 +27,29 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
 
-        db.execSQL("CREATE TABLE " + RO_USER_TABLE_NAME + " ("
-                + "district_code INTEGER," +
-                "district_name TEXT," +
-                "localbody_no INTEGER," +
-                "localbody_name TEXT," +
-                "ro_user_name TEXT," +
-                "ro_mobile_no TEXT," +
-                "localbody_type TEXT," +
-                "localbody_abbr TEXT)");
+        db.execSQL("CREATE TABLE " + ACTIVITY_TYPE_LIST + " ("
+                + "activity_type TEXT," +
+                "activity_type_desc TEXT," +
+                "display_order TEXT)");
+        db.execSQL("CREATE TABLE " + ACTIVITY_LIST + " ("
+                + "activity_id TEXT," +
+                "activity_description TEXT," +
+                "activity_by TEXT," +
+                "activity_type TEXT)");
+        db.execSQL("CREATE TABLE " + POLLING_STATION_LIST + " ("
+                + "lbpolling_station_no TEXT," +
+                "polling_booth_name TEXT," +
+                "llpolling_booth_name TEXT," +
+                "dcode TEXT," +
+                "bcode TEXT," +
+                "pvcode TEXT," +
+                "pvname TEXT)");
+        db.execSQL("CREATE TABLE " + SAVE_DATA + " ("
+                + "ro_zone_id TEXT," +
+                "polling_booth_id TEXT," +
+                "activity_id TEXT," +
+                "activity_remark TEXT)");
 
-        db.execSQL("CREATE TABLE " + POLLING_STATION_IMAGE + " ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-               /* "dcode INTEGER," +
-                "bcode INTEGER," +*/
-                "image BLOB," +
-                "lat TEXT," +
-                "long TEXT," +
-                "image_description TEXT)");
-        db.execSQL("CREATE TABLE " + SAVE_EMP_DETAILS + " ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "pp_id TEXT," +
-                "empcode_type TEXT," +
-                "empcode TEXT," +
-                "name_of_staff TEXT," +
-                "dept_org_name TEXT," +
-                "gender TEXT," +
-                "photo_available TEXT)");
 
 
     }
@@ -61,9 +58,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion >= newVersion) {
             //drop table if already exists
-            db.execSQL("DROP TABLE IF EXISTS " + RO_USER_TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + POLLING_STATION_IMAGE);
-            db.execSQL("DROP TABLE IF EXISTS " + SAVE_EMP_DETAILS);
+            db.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_TYPE_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + POLLING_STATION_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + SAVE_DATA);
             onCreate(db);
         }
     }

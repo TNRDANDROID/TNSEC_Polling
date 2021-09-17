@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="activity"
+            type="com.nic.tnsecPollingPersonnel.adapter.PendingAdapter" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout android:layout_margin="15dp"
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/relative3">
@@ -53,10 +62,10 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingBottom="20dp"
+                            android:paddingTop="0dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="15dp"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -88,13 +97,12 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layout_marginTop="@dimen/_8sdp"
                                     android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/padding"
                                         android:text="Status : "
                                         android:layout_centerVertical="true"
                                         android:id="@+id/status"
@@ -102,62 +110,18 @@
                                         android:textSize="@dimen/_15sdp"
                                         android:visibility="visible"
                                         style="@string/font_circular_medium" />
-
-                                    <RelativeLayout
-                                        android:layout_width="match_parent"
+                                    <TextView
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/padding"
+                                        android:text="Yes"
                                         android:layout_toRightOf="@+id/status"
-                                        android:orientation="horizontal">
+                                        android:layout_centerVertical="true"
+                                        android:id="@+id/status_val"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_15sdp"
+                                        android:visibility="visible"
+                                        style="@string/font_circular_medium" />
 
-                                        <RelativeLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:background="@drawable/rectangle_box"
-                                            android:gravity="center"
-                                            android:orientation="horizontal">
-
-                                            <CheckBox
-                                                android:id="@+id/yes"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_alignParentStart="true"
-                                                android:layout_centerInParent="true"
-                                                android:layout_marginRight="@dimen/_20sdp"
-                                                android:layout_marginLeft="@dimen/_10sdp"
-                                                android:checked="false"
-                                                android:gravity="center"
-                                                android:text="Yes"
-                                                android:textColor="@android:color/black"
-                                                android:textSize="13sp" />
-                                        </RelativeLayout>
-
-                                        <RelativeLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:background="@drawable/rectangle_box"
-                                            android:gravity="center"
-                                            android:layout_alignParentEnd="true"
-                                            android:orientation="horizontal">
-
-                                            <CheckBox
-                                                android:id="@+id/no"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_alignParentStart="true"
-                                                android:layout_centerInParent="true"
-                                                android:checked="false"
-                                                android:gravity="center"
-                                                android:layout_marginRight="@dimen/_20sdp"
-                                                android:layout_marginLeft="@dimen/_10sdp"
-                                                android:text="No"
-                                                android:textColor="@android:color/black"
-                                                android:textSize="13sp" />
-                                        </RelativeLayout>
-                                    </RelativeLayout>
                                 </RelativeLayout>
 
                                 <LinearLayout
@@ -170,7 +134,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/padding"
+                                        android:layout_marginTop="@dimen/_8sdp"
                                         android:text="Remark : "
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_15sdp"
@@ -180,12 +144,12 @@
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/padding"
+                                        android:layout_marginTop="@dimen/_8sdp"
                                         android:background="@drawable/cornered_border_bg_strong"
                                         android:orientation="vertical"
                                         android:visibility="visible">
 
-                                        <EditText
+                                        <TextView
                                             android:id="@+id/remark"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -196,8 +160,7 @@
                                             android:maxLines="5"
                                             android:singleLine="false"
                                             android:background="@android:color/transparent"
-                                            android:hint="Enter Remark"
-                                            android:inputType="textMultiLine"
+                                            android:text="Remark"
                                             android:textColor="@android:color/black"
                                             android:textSize="@dimen/_15sdp"
                                             style="@string/font_circular_book" />
@@ -214,13 +177,17 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="GO"
+                                android:text="Submit"
+                                android:layout_gravity="end"
                                 android:background="@drawable/circle_shadow"
                                 android:layout_centerHorizontal="true"
                                 android:layout_below="@+id/activity_spinner_layout"
                                 android:id="@+id/go"
-                                android:layout_marginTop="@dimen/_10sdp"
-                                android:padding="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp"
+                                android:paddingTop="@dimen/_7sdp"
+                                android:paddingBottom="@dimen/_7sdp"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/_16sdp"
                                 android:textStyle="bold"/>

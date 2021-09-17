@@ -3,256 +3,179 @@ package com.nic.tnsecPollingPersonnel.pojo;
 import android.graphics.Bitmap;
 
 /**
- * Created by AchanthiSundar on 01-11-2017.
+ * Created by Kavitha on 17-09-2021.
  */
 
 public class ElectionProject  {
 
-    private String distictCode;
-    private String districtName;
+    private String activity_type;
+    private String activity_type_desc;
+    private String display_order;
+    private String activity_id;
+    private String activity_description;
+    private String activity_by;
+    private String polling_station_no;
+    private String polling_booth_name;
+    private String llpolling_booth_name;
+    private String dcode;
+    private String bcode;
+    private String pvcode;
+    private String pvname;
+    private String service_id;
+    private String ro_zone_id;
+    private String polling_booth_id;
+    private String activity_remark;
 
-    private String blockCode;
-
-    String empcode_type;
-    String empcode_description;
-    String emp_image;
-    String emp_designation_name;
-    String emp_ddo_code;
-
-    String pp_id,name_of_staff,dept_org_name,gender,photo_available;
-
-    public String getEmp_ddo_code() {
-        return emp_ddo_code;
+    public String getActivity_type() {
+        return activity_type;
     }
 
-    public ElectionProject setEmp_ddo_code(String emp_ddo_code) {
-        this.emp_ddo_code = emp_ddo_code;
+    public ElectionProject setActivity_type(String activity_type) {
+        this.activity_type = activity_type;
         return this;
     }
 
-    public String getEmp_designation_name() {
-        return emp_designation_name;
+    public String getActivity_type_desc() {
+        return activity_type_desc;
     }
 
-    public ElectionProject setEmp_designation_name(String emp_designation_name) {
-        this.emp_designation_name = emp_designation_name;
+    public ElectionProject setActivity_type_desc(String activity_type_desc) {
+        this.activity_type_desc = activity_type_desc;
         return this;
     }
 
-    public String getEmp_image() {
-        return emp_image;
+    public String getDisplay_order() {
+        return display_order;
     }
 
-    public ElectionProject setEmp_image(String emp_image) {
-        this.emp_image = emp_image;
+    public ElectionProject setDisplay_order(String display_order) {
+        this.display_order = display_order;
         return this;
     }
 
-    public String getPp_id() {
-        return pp_id;
+    public String getActivity_id() {
+        return activity_id;
     }
 
-    public ElectionProject setPp_id(String pp_id) {
-        this.pp_id = pp_id;
+    public ElectionProject setActivity_id(String activity_id) {
+        this.activity_id = activity_id;
         return this;
     }
 
-    public String getName_of_staff() {
-        return name_of_staff;
+    public String getActivity_description() {
+        return activity_description;
     }
 
-    public ElectionProject setName_of_staff(String name_of_staff) {
-        this.name_of_staff = name_of_staff;
+    public ElectionProject setActivity_description(String activity_description) {
+        this.activity_description = activity_description;
         return this;
     }
 
-    public String getDept_org_name() {
-        return dept_org_name;
+    public String getActivity_by() {
+        return activity_by;
     }
 
-    public ElectionProject setDept_org_name(String dept_org_name) {
-        this.dept_org_name = dept_org_name;
+    public ElectionProject setActivity_by(String activity_by) {
+        this.activity_by = activity_by;
         return this;
     }
 
-    public String getGender() {
-        return gender;
+    public String getPolling_station_no() {
+        return polling_station_no;
     }
 
-    public ElectionProject setGender(String gender) {
-        this.gender = gender;
+    public ElectionProject setPolling_station_no(String polling_station_no) {
+        this.polling_station_no = polling_station_no;
         return this;
     }
 
-    public String getPhoto_available() {
-        return photo_available;
+    public String getPolling_booth_name() {
+        return polling_booth_name;
     }
 
-    public ElectionProject setPhoto_available(String photo_available) {
-        this.photo_available = photo_available;
+    public ElectionProject setPolling_booth_name(String polling_booth_name) {
+        this.polling_booth_name = polling_booth_name;
         return this;
     }
 
-    public String getEmpcode_type() {
-        return empcode_type;
+    public String getLlpolling_booth_name() {
+        return llpolling_booth_name;
     }
 
-    public ElectionProject setEmpcode_type(String empcode_type) {
-        this.empcode_type = empcode_type;
+    public ElectionProject setLlpolling_booth_name(String llpolling_booth_name) {
+        this.llpolling_booth_name = llpolling_booth_name;
         return this;
     }
 
-    public String getEmpcode_description() {
-        return empcode_description;
+    public String getDcode() {
+        return dcode;
     }
 
-    public ElectionProject setEmpcode_description(String empcode_description) {
-        this.empcode_description = empcode_description;
+    public ElectionProject setDcode(String dcode) {
+        this.dcode = dcode;
         return this;
     }
 
-    public String getFinancialYear() {
-        return FinancialYear;
+    public String getBcode() {
+        return bcode;
     }
 
-    public ElectionProject setFinancialYear(String financialYear) {
-        FinancialYear = financialYear;
+    public ElectionProject setBcode(String bcode) {
+        this.bcode = bcode;
         return this;
     }
 
-    public ElectionProject setId(Integer id) {
-        this.id = id;
+    public String getPvcode() {
+        return pvcode;
+    }
+
+    public ElectionProject setPvcode(String pvcode) {
+        this.pvcode = pvcode;
         return this;
     }
 
-    public String getStaffName() {
-        return staffName;
+    public String getPvname() {
+        return pvname;
     }
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
+    public ElectionProject setPvname(String pvname) {
+        this.pvname = pvname;
+        return this;
     }
 
-    private String staffName;
-
-    private String selectedBlockCode;
-
-    private String FinancialYear;
-
-    private String PvCode;
-    private String PvName;
-
-    private String blockName;
-
-    public String getDescription() {
-        return Description;
+    public String getService_id() {
+        return service_id;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public ElectionProject setService_id(String service_id) {
+        this.service_id = service_id;
+        return this;
     }
 
-    private String Description;
-    private String Latitude;
-    private String Longitude;
-
-    public Bitmap getImage() {
-        return Image;
+    public String getRo_zone_id() {
+        return ro_zone_id;
     }
 
-    public void setImage(Bitmap image) {
-        Image = image;
+    public ElectionProject setRo_zone_id(String ro_zone_id) {
+        this.ro_zone_id = ro_zone_id;
+        return this;
     }
 
-    private Bitmap Image;
-
-
-
-    public String getPvName() {
-        return PvName;
+    public String getPolling_booth_id() {
+        return polling_booth_id;
     }
 
-    public void setPvName(String pvName) {
-        PvName = pvName;
+    public ElectionProject setPolling_booth_id(String polling_booth_id) {
+        this.polling_booth_id = polling_booth_id;
+        return this;
     }
 
-
-    public String getDistrictName() {
-        return districtName;
+    public String getActivity_remark() {
+        return activity_remark;
     }
 
-    public void setDistrictName(String districtName) {
-        this.districtName = districtName;
+    public ElectionProject setActivity_remark(String activity_remark) {
+        this.activity_remark = activity_remark;
+        return this;
     }
-
-
-    public String getDistictCode() {
-        return distictCode;
-    }
-
-    public void setDistictCode(String distictCode) {
-        this.distictCode = distictCode;
-    }
-
-    public String getBlockCode() {
-        return blockCode;
-    }
-
-    public void setBlockCode(String blockCode) {
-        this.blockCode = blockCode;
-    }
-
-    public String getBlockName() {
-        return blockName;
-    }
-
-    public void setBlockName(String blockName) {
-        this.blockName = blockName;
-    }
-
-    public String getSelectedBlockCode() {
-        return selectedBlockCode;
-    }
-
-    public void setSelectedBlockCode(String selectedBlockCode) {
-        this.selectedBlockCode = selectedBlockCode;
-    }
-    public String getPvCode() {
-        return PvCode;
-    }
-
-    public void setPvCode(String pvCode) {
-        this.PvCode = pvCode;
-    }
-
-
-    public String getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        Latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        Longitude = longitude;
-    }
-    public Integer getPhotoID() {
-        return photoID;
-    }
-
-    public void setPhotoID(Integer photoID) {
-        this.photoID = photoID;
-    }
-
-    private Integer photoID;
-
-    public Integer getId() {
-        return id;
-    }
-    private Integer id;
 }

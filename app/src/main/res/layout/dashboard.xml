@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="activity"
+            type="com.nic.tnsecPollingPersonnel.activity.Dashboard" />
+    </data>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -106,39 +111,43 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:maxHeight="200dp"
                 android:id="@+id/relative2"
                 android:background="@drawable/button_background5">
 
                 <RelativeLayout
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:maxHeight="200dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_60sdp"
                     android:background="@drawable/button_background2"
                     android:id="@+id/left2">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ro Name"
+                        android:layout_height="match_parent"
+                        android:text="Zonal Name"
+                        android:padding="@dimen/_8sdp"
                         android:layout_centerVertical="true"
                         android:layout_centerInParent="true"
                         android:id="@+id/name_h"
+                        android:gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_16sdp"
+                        android:textSize="@dimen/_15sdp"
                         android:textStyle="bold"/>
 
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/left2">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="Ro Name"
                         android:layout_centerVertical="true"
                         android:id="@+id/name"
+                        android:gravity="center_vertical"
                         android:padding="@dimen/_8sdp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_16sdp"
@@ -152,6 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_20sdp"
+                android:id="@id/relative3"
                 android:background="@drawable/cornered_bg_colored_circle_top"
                 android:layout_below="@+id/relative2">
                 <RelativeLayout
@@ -212,6 +222,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="GO"
+                        android:onClick="@{()-> activity.showActivityScreen()}"
                         android:background="@drawable/circle_shadow"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/activity_spinner_layout"
@@ -222,6 +233,36 @@
                         android:textSize="@dimen/_16sdp"
                         android:textStyle="bold"/>
 
+<!--
+                    <RelativeLayout
+                        android:id="@+id/save_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:padding="15dp"
+                        android:layout_marginTop="@dimen/_30sdp"
+                        android:elevation="3dp"
+                        android:onClick="@{()-> activity.showPendingScreen()}"
+                        android:layout_below="@+id/go"
+                        android:visibility="visible">
+
+
+                        <TextView
+                            style="@string/font_circular_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="Sync Data"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_17sdp" />
+
+
+                    </RelativeLayout>
+-->
 
 
                 </RelativeLayout>
@@ -232,6 +273,35 @@
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/save_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/elevation_bottom_lite_bg"
+        android:layout_alignParentBottom="true"
+        android:padding="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:elevation="3dp"
+        android:onClick="@{()-> activity.showPendingScreen()}"
+        android:visibility="visible">
+
+
+        <TextView
+            style="@string/font_circular_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Sync Data"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_17sdp" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
 
@@ -252,10 +322,4 @@
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <data>
-
-        <variable
-            name="activity"
-            type="com.nic.tnsecPollingPersonnel.activity.Dashboard" />
-    </data>
 </layout>

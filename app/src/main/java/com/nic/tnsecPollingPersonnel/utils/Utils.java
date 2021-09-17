@@ -309,11 +309,25 @@ public class Utils {
     public static void imageAnimation(){
 
     }
-    public static JSONObject empTypeJsonParams(Activity activity) throws JSONException {
+    public static JSONObject ActivityTypeListParams(Activity activity) throws JSONException {
         prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();
-        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_EMP_TYPE);
-        Log.d("empTypeJsonParams", "" + dataSet);
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.ZP_ACTIVITY_TYPE);
+        Log.d("ActivityTypeListParams", "" + dataSet);
+        return dataSet;
+    }
+    public static JSONObject ActivityListParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.ZP_ACTIVITY);
+        Log.d("ActivityListParams", "" + dataSet);
+        return dataSet;
+    }
+    public static JSONObject PollingStationListParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.ZP_POLLING_BOOTH_LIST);
+        Log.d("ActivityListParams", "" + dataSet);
         return dataSet;
     }
     public static JSONObject serverDataListJsonParams() throws JSONException {

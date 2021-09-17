@@ -35,7 +35,11 @@ public class PrefManager {
     private static final String KEY_VILLAGE_LIST_PV_NAME = "Village_List_Pv_Name";
     private static final String KEY_DESIGNATION = "Designation";
     private static final String KEY_NAME = "Name";
+    private static final String RO_ZONE_ID = "ro_zone_id";
+    private static final String ZONAL_PARTY_NAME = "zonal_party_name";
     public static final String SERVER_DATA_LIST = "ServerDataList";
+    public static final String ACTIVITY_TYPE = "activity_type";
+    public static final String ACTIVITY_ID = "activity_id";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -50,17 +54,26 @@ public class PrefManager {
         editor.commit();
     }
 
-    public String getUserPassKey() {
-        return pref.getString(KEY_USER_PASS_KEY, null);
-    }
-
-
     public void setUserName(String userName) {
         editor.putString(KEY_USER_NAME, userName);
         editor.commit();
     }
 
     public String getUserName() { return pref.getString(KEY_USER_NAME, null); }
+
+    public void setRoZoneId(String roZoneId) {
+        editor.putString(RO_ZONE_ID, roZoneId);
+        editor.commit();
+    }
+
+    public String getRoZoneId() { return pref.getString(RO_ZONE_ID, null); }
+
+    public void setZonalPartyName(String zonal_party_name) {
+        editor.putString(ZONAL_PARTY_NAME, zonal_party_name);
+        editor.commit();
+    }
+
+    public String getZonalPartyName() { return pref.getString(ZONAL_PARTY_NAME, null); }
 
     public void setUserPassword(String userPassword) {
         editor.putString(KEY_USER_PASSWORD, userPassword);
@@ -77,6 +90,24 @@ public class PrefManager {
 
     public String getEncryptPass() {
         return pref.getString(KEY_ENCRYPT_PASS, null);
+    }
+
+ public void setActivityType(String activityType) {
+        editor.putString(ACTIVITY_TYPE, activityType);
+        editor.commit();
+    }
+
+    public String getActivityType() {
+        return pref.getString(ACTIVITY_TYPE, null);
+    }
+
+ public void setActivityId(String activityId) {
+        editor.putString(ACTIVITY_ID, activityId);
+        editor.commit();
+    }
+
+    public String getActivityId() {
+        return pref.getString(ACTIVITY_ID, null);
     }
 
 
@@ -117,6 +148,9 @@ public class PrefManager {
     public void setUserPassKey(String userPassKey) {
         editor.putString(KEY_USER_PASS_KEY, userPassKey);
         editor.commit();
+    }
+    public String getUserPassKey() {
+        return pref.getString(KEY_USER_PASS_KEY, null);
     }
 
 

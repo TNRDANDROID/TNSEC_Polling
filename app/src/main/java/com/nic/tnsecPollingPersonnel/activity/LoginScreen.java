@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import com.android.volley.VolleyError;
+import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
+import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.api.Api;
@@ -26,10 +30,15 @@ import com.nic.tnsecPollingPersonnel.api.ApiService;
 import com.nic.tnsecPollingPersonnel.api.ServerResponse;
 import com.nic.tnsecPollingPersonnel.constant.AppConstant;
 import com.nic.tnsecPollingPersonnel.databinding.LoginScreenBinding;
+import com.nic.tnsecPollingPersonnel.pojo.ElectionProject;
 import com.nic.tnsecPollingPersonnel.utils.UrlGenerator;
 import com.nic.tnsecPollingPersonnel.utils.Utils;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +52,9 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     private String randString;
     JSONObject jsonObject;
     private PrefManager prefManager;
-
+    public dbData dbData = new dbData(this);
+    public static DBHelper dbHelper;
+    public static SQLiteDatabase db;
 
 public LoginScreenBinding loginScreenBinding;
 
@@ -59,6 +70,13 @@ public LoginScreenBinding loginScreenBinding;
         loginScreenBinding.scrollView.isSmoothScrollingEnabled();*/
 //        WindowPreferencesManager windowPreferencesManager = new WindowPreferencesManager(this);
 //        windowPreferencesManager.applyEdgeToEdgePreference(getWindow());
+        try {
+            dbHelper = new DBHelper(this);
+            db = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         intializeUI();
 
 
@@ -150,7 +168,7 @@ public LoginScreenBinding loginScreenBinding;
         /*loginScreenBinding.username.setText("ppdekpm01");
         loginScreenBinding.password.setText("test123#$");*/
 
-        loginScreenBinding.username.setText("ppdevpm01");
+        loginScreenBinding.username.setText("zpvelgthm7");
         loginScreenBinding.password.setText("test123#$");
 
         final String username = loginScreenBinding.username.getText().toString().trim();
@@ -215,7 +233,7 @@ public LoginScreenBinding loginScreenBinding;
 
         params.put(AppConstant.KEY_USER_PASSWORD, sha256);
         params.put(AppConstant.KEY_APP_CODE,"P");
-//        params.put(AppConstant.KEY_DEVICE_ID,android_id);
+        params.put(AppConstant.KEY_APP_ID,"com.nic.tnsecPollingPersonnel");
 
         Log.d("user", "" + loginScreenBinding.username.getText().toString().trim());
 
@@ -231,10 +249,10 @@ public LoginScreenBinding loginScreenBinding;
         try {
             JSONObject loginResponse = serverResponse.getJsonResponse();
             String urlType = serverResponse.getApi();
-            String status = loginResponse.getString(AppConstant.KEY_STATUS);
-            String response = loginResponse.getString(AppConstant.KEY_RESPONSE);
 
             if ("LoginScreen".equals(urlType)) {
+                String status = loginResponse.getString(AppConstant.KEY_STATUS);
+                String response = loginResponse.getString(AppConstant.KEY_RESPONSE);
                 if (status.equalsIgnoreCase("OK")) {
                     if (response.equals("LOGIN_SUCCESS")) {
                         Log.d("loginResponse", "" + loginResponse);
@@ -244,9 +262,15 @@ public LoginScreenBinding loginScreenBinding;
                         String userDataDecrypt = Utils.decrypt(prefManager.getEncryptPass(), user_data);
                         Log.d("userdatadecry", "" + userDataDecrypt);
                         jsonObject = new JSONObject(userDataDecrypt);
-                        prefManager.setUserPassKey(jsonObject.getString(AppConstant.DISTRICT_CODE));
+                        prefManager.setDistrictCode(jsonObject.getString(AppConstant.DISTRICT_CODE));
+                        prefManager.setBlockCode(jsonObject.getString(AppConstant.BLOCK_CODE));
+                        prefManager.setRoZoneId(jsonObject.getString(AppConstant.RO_ZONE_ID));
+                        prefManager.setZonalPartyName(jsonObject.getString(AppConstant.ZONAL_PARTY_NAME));
 
                         prefManager.setUserPassKey(decryptedKey);
+                        getActivityTypeList();
+                        getActivityList();
+                        getPollingStationList();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -262,13 +286,187 @@ public LoginScreenBinding loginScreenBinding;
                 }
 
             }
+            if ("ActivityTypeList".equals(urlType) && loginResponse != null) {
+                String key = loginResponse.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertActivityTypeListTask().execute(jsonObject);
+                }
+                Log.d("ActivityTypeListRes", "" + responseDecryptedBlockKey);
+            }
+            if ("ActivityList".equals(urlType) && loginResponse != null) {
+                String key = loginResponse.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertActivityListTask().execute(jsonObject);
+                }
+                Log.d("ActivityListRes", "" + responseDecryptedBlockKey);
+            }
+            if ("PollingStationList".equals(urlType) && loginResponse != null) {
+                String key = loginResponse.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    new InsertPollingStationListTask().execute(jsonObject);
+                }
+                Log.d("ActivityListRes", "" + responseDecryptedBlockKey);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+    public void getActivityTypeList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("ActivityTypeList", Api.Method.POST, UrlGenerator.getMainServiceUrl(), ActivityTypeListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getActivityList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("ActivityList", Api.Method.POST, UrlGenerator.getMainServiceUrl(), ActivityListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getPollingStationList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("PollingStationList", Api.Method.POST, UrlGenerator.getMainServiceUrl(), PollingStationListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public JSONObject PollingStationListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.PollingStationListParams(this).toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("ActivityList", "" + dataSet);
+        return dataSet;
+    }
+    public JSONObject ActivityListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.ActivityListParams(this).toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("ActivityList", "" + dataSet);
+        return dataSet;
+    }
+    public JSONObject ActivityTypeListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.ActivityTypeListParams(this).toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("ActivityTypeList", "" + dataSet);
+        return dataSet;
+    }
 
+    public class InsertActivityTypeListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.open();
+            ArrayList<ElectionProject> count = dbData.getAll_ActivityType();
+            if (count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ElectionProject ListValue = new ElectionProject();
+                        try {
+                            ListValue.setActivity_type(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_TYPE));
+                            ListValue.setActivity_type_desc(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_TYPE_DESC));
+                            ListValue.setDisplay_order(jsonArray.getJSONObject(i).getString(AppConstant.DISPLAY_ORDER));
+                            dbData.insertActivityType(ListValue);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+
+    }
+    public class InsertActivityListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.open();
+            ArrayList<ElectionProject> count = dbData.getAll_ActivityList();
+            if (count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ElectionProject ListValue = new ElectionProject();
+                        try {
+                            ListValue.setActivity_id(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_ID));
+                            ListValue.setActivity_description(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_DESCRIPTION));
+                            ListValue.setActivity_by(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_BY));
+                            ListValue.setActivity_type(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_TYPE));
+                            dbData.insertActivityList(ListValue);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+
+    }
+    public class InsertPollingStationListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.open();
+            ArrayList<ElectionProject> count = dbData.getAll_PollingStationList();
+            if (count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ElectionProject ListValue = new ElectionProject();
+                        try {
+                            ListValue.setActivity_id(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_ID));
+                            ListValue.setActivity_description(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_DESCRIPTION));
+                            ListValue.setActivity_by(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_BY));
+                            ListValue.setActivity_type(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_TYPE));
+                            dbData.insertActivityList(ListValue);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+
+    }
     @Override
     public void OnError(VolleyError volleyError) {
         Utils.showAlert(this, "Server Error!");

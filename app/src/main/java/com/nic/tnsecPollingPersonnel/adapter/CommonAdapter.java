@@ -51,11 +51,11 @@ public class CommonAdapter extends BaseAdapter {
         TextView tv_type = (TextView) view.findViewById(R.id.spinner_list_value);
         ElectionProject electionProject = electionProjects.get(position);
 
-        if (type.equalsIgnoreCase("DistrictList")) {
-            tv_type.setText(electionProject.getDistrictName());
+        if (type.equalsIgnoreCase("activityTypeList")) {
+            tv_type.setText(electionProject.getActivity_type_desc());
         }
-        else if (type.equalsIgnoreCase("EmpList")){
-            tv_type.setText(electionProject.getEmpcode_type());
+        else if (type.equalsIgnoreCase("activityList")){
+            tv_type.setText(electionProject.getActivity_description());
         }
         return view;
     }
