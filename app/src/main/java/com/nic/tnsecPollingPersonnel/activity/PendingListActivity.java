@@ -209,6 +209,8 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
                     adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                }else {
+                    Utils.showAlert(this,jsonObject.getString("MESSAGE"));
                 }
 
 

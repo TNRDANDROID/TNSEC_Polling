@@ -25,20 +25,29 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
 import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
 import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.activity.LoginScreen;
+import com.nic.tnsecPollingPersonnel.activity.PendingListActivity;
 import com.nic.tnsecPollingPersonnel.activity.PollingStationList;
+import com.nic.tnsecPollingPersonnel.api.Api;
+import com.nic.tnsecPollingPersonnel.api.ApiService;
+import com.nic.tnsecPollingPersonnel.api.ServerResponse;
 import com.nic.tnsecPollingPersonnel.constant.AppConstant;
 import com.nic.tnsecPollingPersonnel.databinding.PollingStaionRecyclerItemBinding;
 import com.nic.tnsecPollingPersonnel.pojo.ElectionProject;
+import com.nic.tnsecPollingPersonnel.utils.UrlGenerator;
 import com.nic.tnsecPollingPersonnel.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAdapter.MyViewHolder> {
+public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAdapter.MyViewHolder> implements Api.ServerResponseListener {
 
     private static Activity context;
     private PrefManager prefManager;
@@ -47,6 +56,9 @@ public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAd
     public dbData dbData;
     String activityStatus;
     int row_index=-1;
+    MyViewHolder myHolder;
+     int myPosition;
+     String activityRemark;
 
     public PollingStationAdapter(Activity context, ArrayList<ElectionProject> projectList) {
 
@@ -185,34 +197,6 @@ public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAd
             }
         });
 
-      /*  holder.pollingStaionRecyclerItemBinding.yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.pollingStaionRecyclerItemBinding.yes.isChecked()){
-                    holder.pollingStaionRecyclerItemBinding.yes.setChecked(false);
-                    ((PollingStationList) context).updateUnCheckStatus(projectList,position);
-                }
-//                holder.pollingStaionRecyclerItemBinding.yes.setChecked(true);
-                holder.pollingStaionRecyclerItemBinding.no.setChecked(false);
-                holder.pollingStaionRecyclerItemBinding.save.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_unchecked));
-                ((PollingStationList) context).updateYesStatus(projectList,position);
-            }
-        });
-        holder.pollingStaionRecyclerItemBinding.no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.pollingStaionRecyclerItemBinding.no.isChecked()){
-                    holder.pollingStaionRecyclerItemBinding.no.setChecked(false);
-                    ((PollingStationList) context).updateUnCheckStatus(projectList,position);
-                }
-                holder.pollingStaionRecyclerItemBinding.yes.setChecked(false);
-//                holder.pollingStaionRecyclerItemBinding.no.setChecked(true);
-                holder.pollingStaionRecyclerItemBinding.save.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_unchecked));
-                ((PollingStationList) context).updateNoStatus(projectList,position);
-
-            }
-        });*/
-
     }
 
 
@@ -278,52 +262,88 @@ public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAd
         textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public void saveDetailsInsertUpdate(MyViewHolder holder, int position, String remarks, String polling_booth_name){
+    public void saveDetailsInsertUpdate(MyViewHolder holder, int position, String remarks, String polling_booth_name) {
         String selection = null;
         String[] selectionArgs = null;
-        String ro_zone_id,pvname,polling_booth_id,activity_name,activity_id,activity_type,activity_remark,activity_status,Polling_station_no;
-        ro_zone_id=prefManager.getRoZoneId();
-        polling_booth_id=projectList.get(position).getPolling_booth_id();
-        Polling_station_no=projectList.get(position).getPolling_station_no();
-        pvname=projectList.get(position).getPvname();
-        activity_id=prefManager.getActivityId();
-        activity_name=prefManager.getActivityName();
-        activity_type=prefManager.getActivityType();
-        activity_remark=remarks;
-        activity_status= activityStatus;
+        String ro_zone_id, pvname, polling_booth_id, activity_name, activity_id, activity_type, activity_remark, activity_status, Polling_station_no;
+        ro_zone_id = prefManager.getRoZoneId();
+        polling_booth_id = projectList.get(position).getPolling_booth_id();
+        Polling_station_no = projectList.get(position).getPolling_station_no();
+        pvname = projectList.get(position).getPvname();
+        activity_id = prefManager.getActivityId();
+        activity_name = prefManager.getActivityName();
+        activity_type = prefManager.getActivityType();
+        activity_remark = remarks;
+        activity_status = activityStatus;
 
         ContentValues values = new ContentValues();
-        values.put(AppConstant.RO_ZONE_ID,ro_zone_id);
-        values.put(AppConstant.POLLING_BOOTH_ID,polling_booth_id);
-        values.put(AppConstant.POLLING_STATION_NO,Polling_station_no);
-        values.put(AppConstant.PV_NAME,pvname);
-        values.put(AppConstant.ACTIVITY_ID,activity_id);
-        values.put(AppConstant.ACTIVITY_DESCRIPTION,activity_name);
-        values.put(AppConstant.ACTIVITY_TYPE,activity_type);
-        values.put(AppConstant.ACTIVITY_REMARK,activity_remark);
-        values.put(AppConstant.ACTIVITY_STATUS,activity_status);
-        values.put(AppConstant.POLLING_BOOTH_NAME,polling_booth_name);
+        values.put(AppConstant.RO_ZONE_ID, ro_zone_id);
+        values.put(AppConstant.POLLING_BOOTH_ID, polling_booth_id);
+        values.put(AppConstant.POLLING_STATION_NO, Polling_station_no);
+        values.put(AppConstant.PV_NAME, pvname);
+        values.put(AppConstant.ACTIVITY_ID, activity_id);
+        values.put(AppConstant.ACTIVITY_DESCRIPTION, activity_name);
+        values.put(AppConstant.ACTIVITY_TYPE, activity_type);
+        values.put(AppConstant.ACTIVITY_REMARK, activity_remark);
+        values.put(AppConstant.ACTIVITY_STATUS, activity_status);
+        values.put(AppConstant.POLLING_BOOTH_NAME, polling_booth_name);
+        if (Utils.isOnline()) {
+            JSONObject dataSet = new JSONObject();
+            try {
+                dataSet.put("service_id", AppConstant.ZP_POLLING_BOOTH_SAVE);
+                dataSet.put("ro_zone_id", ro_zone_id);
+                dataSet.put("polling_booth_id", polling_booth_id);
+                dataSet.put("activity_id", activity_id);
+                dataSet.put("activity_remark", activity_remark);
+                dataSet.put("activity_status", activity_status);
+
+               saveKVVTImagesJsonParams(dataSet,holder,position,activity_remark);
+            } catch (JSONException e) {
+
+            }
+
+        } else {
         dbData.open();
-        if(dbData.getSavedDetailsPolingStationNumber(polling_booth_id,activity_id,activity_type).size()==0) {
+        if (dbData.getSavedDetailsPolingStationNumber(polling_booth_id, activity_id, activity_type).size() == 0) {
             long id = LoginScreen.db.insert(DBHelper.SAVE_DATA, null, values);
             Log.d("Insert_id_structures", String.valueOf(id));
             Log.d("Insert_values", String.valueOf(values));
             holder.pollingStaionRecyclerItemBinding.save.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_checked));
             projectList.get(position).setSave_status("Yes");
             projectList.get(position).setGet_remark_text(remarks);
-            Utils.showAlert(context,"Inserted Successfully");
-        }
-        else {
+            Utils.showAlert(context, "Data Inserted Successfully In Local!");
+        } else {
             selection = "polling_booth_id = ? and activity_id = ? and activity_type = ? ";
-            selectionArgs = new String[]{polling_booth_id,activity_id,activity_type};
-            long id=LoginScreen.db.update(DBHelper.SAVE_DATA, values, selection, selectionArgs);
+            selectionArgs = new String[]{polling_booth_id, activity_id, activity_type};
+            long id = LoginScreen.db.update(DBHelper.SAVE_DATA, values, selection, selectionArgs);
             holder.pollingStaionRecyclerItemBinding.save.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_checked));
             projectList.get(position).setSave_status("Yes");
             projectList.get(position).setGet_remark_text(remarks);
-            Utils.showAlert(context,"Updated Successfully");
+            Utils.showAlert(context, "Data Updated Successfully In Local!");
         }
+    }
         notifyDataSetChanged();
 
+    }
+    public JSONObject saveKVVTImagesJsonParams(JSONObject savePollingDetails, MyViewHolder holder, int position, String activity_remark) {
+        myHolder=holder;
+        myPosition=position;
+        activityRemark=activity_remark;
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), context.getResources().getString(R.string.init_vector), savePollingDetails.toString());
+        JSONObject dataSet = new JSONObject();
+        try {
+            dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+            dataSet.put(AppConstant.DATA_CONTENT, authKey);
+
+            new ApiService(context).makeJSONObjectRequest("savePolling", Api.Method.POST, UrlGenerator.getMainServiceUrl(), dataSet, "not cache", this);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("savePolling", "" + savePollingDetails);
+
+        return dataSet;
     }
 
 
@@ -335,5 +355,38 @@ public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAd
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    @Override
+    public void OnMyResponse(ServerResponse serverResponse) {
+        try {
+            String urlType = serverResponse.getApi();
+            JSONObject responseObj = serverResponse.getJsonResponse();
+            if ("savePolling".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                Log.d("saved_response", "" + responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                    Utils.showAlert(context,"Successfully Uploaded");
+                    myHolder.pollingStaionRecyclerItemBinding.save.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_checked));
+                    projectList.get(myPosition).setSave_status("Yes");
+                    projectList.get(myPosition).setGet_remark_text(activityRemark);
+                    notifyDataSetChanged();
+                }else {
+                    Utils.showAlert(context,jsonObject.getString("MESSAGE"));
+                }
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void OnError(VolleyError volleyError) {
+
     }
 }
