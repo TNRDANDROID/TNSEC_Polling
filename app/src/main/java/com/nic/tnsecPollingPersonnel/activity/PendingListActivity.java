@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -22,20 +24,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
+import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.adapter.PendingAdapter;
 import com.nic.tnsecPollingPersonnel.adapter.PollingStationAdapter;
 import com.nic.tnsecPollingPersonnel.api.Api;
+import com.nic.tnsecPollingPersonnel.api.ApiService;
 import com.nic.tnsecPollingPersonnel.api.ServerResponse;
+import com.nic.tnsecPollingPersonnel.constant.AppConstant;
 import com.nic.tnsecPollingPersonnel.databinding.PendingScreenBinding;
 import com.nic.tnsecPollingPersonnel.dialog.MyDialog;
 import com.nic.tnsecPollingPersonnel.pojo.ElectionProject;
+import com.nic.tnsecPollingPersonnel.utils.UrlGenerator;
+import com.nic.tnsecPollingPersonnel.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class PendingListActivity extends AppCompatActivity implements MyDialog.myOnClickListener, Api.ServerResponseListener, View.OnClickListener {
@@ -50,6 +61,8 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
     private RecyclerView recyclerView;
     private PendingAdapter adapter;
     ArrayList<ElectionProject> electionProjects = new ArrayList<>();
+    public dbData dbData= new dbData(this);
+    String polling_booth_id,activity_id,activity_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +100,16 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
+        dbData.open();
+        electionProjects = new ArrayList<>();
+        electionProjects.addAll(dbData.getSavedDetails());
+/*
+        Collections.sort(electionProjects, new Comparator<ElectionProject>() {
+            public int compare(ElectionProject lhs, ElectionProject rhs) {
+                return Integer.parseInt(lhs.getPolling_station_no()) - Integer.parseInt(rhs.getPolling_station_no());
+            }
+        });
+*/
         adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
         recyclerView.setAdapter(adapter);
     }
@@ -137,12 +160,59 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
         return super.onKeyDown(keyCode, event);
     }
 
+    public JSONObject saveKVVTImagesJsonParams(JSONObject savePollingDetails,String polling_booth_id1,String activityId,String activityType) {
+        polling_booth_id=polling_booth_id1;
+        activity_id=activityId;
+        activity_type=activityType;
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), savePollingDetails.toString());
+        JSONObject dataSet = new JSONObject();
+        try {
+            dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+            dataSet.put(AppConstant.DATA_CONTENT, authKey);
+
+            new ApiService(this).makeJSONObjectRequest("savePolling", Api.Method.POST, UrlGenerator.getMainServiceUrl(), dataSet, "not cache", this);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("savePolling", "" + savePollingDetails);
+
+        return dataSet;
+    }
 
     @Override
     public void OnMyResponse(ServerResponse serverResponse) {
         try {
             String urlType = serverResponse.getApi();
             JSONObject responseObj = serverResponse.getJsonResponse();
+
+            if ("savePolling".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                Log.d("saved_response", "" + responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+
+                    Utils.showAlert(this,"Successfully Uploaded");
+                    db.delete(DBHelper.SAVE_DATA,"polling_booth_id = ? and activity_id = ? and activity_type = ? "
+                            ,new String[] {polling_booth_id,activity_id,activity_type});
+                    electionProjects = new ArrayList<>();
+                    electionProjects.addAll(dbData.getSavedDetails());
+/*
+                    Collections.sort(electionProjects, new Comparator<ElectionProject>() {
+                        public int compare(ElectionProject lhs, ElectionProject rhs) {
+                            return Integer.parseInt(lhs.getPolling_station_no()) - Integer.parseInt(rhs.getPolling_station_no());
+                        }
+                    });
+*/
+                    adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+
+
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

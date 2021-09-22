@@ -36,8 +36,9 @@ public class AppConstant {
     public static String ZP_ACTIVITY_TYPE= "zp_activity_type";
     public static String ZP_ACTIVITY= "zp_activity";
     public static String ZP_POLLING_BOOTH_LIST= "zp_polling_booth_list";
+    public static String ZP_POLLING_BOOTH_SAVE= "zp_polling_booth_save";
     public static String LEVELS = "levels";
-    public static String KEY_SERVER_DATA = "emp_entry_list";
+    public static String KEY_SERVER_DATA = "zp_polling_booth_report_list";
 
     public static  String ACTIVITY_TYPE = "activity_type";
     public static  String ACTIVITY_TYPE_DESC = "activity_type_desc";
@@ -46,10 +47,15 @@ public class AppConstant {
     public static  String ACTIVITY_DESCRIPTION = "activity_description";
     public static  String ACTIVITY_BY = "activity_by";
     public static  String POLLING_STATION_NO= "polling_station_no";
+    public static  String LPOLLING_STATION_NO= "lbpolling_station_no";
     public static  String POLLING_BOOTH_NAME = "polling_booth_name";
     public static  String LLPOLLING_BOOTH_NAME = "llpolling_booth_name";
-    public static  String SERVICE_ID = "service_id";
     public static  String POLLING_BOOTH_ID = "polling_booth_id";
     public static  String ACTIVITY_REMARK = "activity_remark";
+    public static  String ACTIVITY_STATUS = "activity_status";
+    public static  String save_status = "save_status";
+    public static  String IS_CHECKED = "is_checked";
+    public static  String UN_CHECKED = "un_checked";
+    public static  String GET_REMARK_TEXT = "get_remark_text";
 
 }

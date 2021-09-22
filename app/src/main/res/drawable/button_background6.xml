@@ -77,7 +77,14 @@
     <!-- Background -->
     <item>
         <shape>
+<!--
             <solid android:color="@color/colorPrimary"/>
+-->
+            <gradient
+                android:angle="180"
+                android:endColor="@color/colorPrimary"
+                android:startColor="@color/purplelite" />
+
             <corners android:topRightRadius="360dp"
                 android:topLeftRadius="360dp"
                 android:bottomLeftRadius="360dp"

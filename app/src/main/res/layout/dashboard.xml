@@ -22,7 +22,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/background_gradient"
             >
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -273,6 +273,7 @@
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
+<!--
     <RelativeLayout
         android:id="@+id/save_data"
         android:layout_width="wrap_content"
@@ -302,7 +303,103 @@
 
 
     </RelativeLayout>
+-->
+<!--
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/view_server_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="@dimen/padding"
+        android:src="@drawable/ic_database"
+        app:backgroundTint="@color/white"
+        app:tint="@color/colorPrimary"
+        app:fabSize="normal"
+        app:maxImageSize="@dimen/_25sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"/>
+-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:elevation="3dp"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/view_server_data"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:background="@drawable/button_background_purple"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:id="@+id/img"
+                    android:tint="@color/colorPrimary"
+                    android:padding="@dimen/_6sdp"
+                    android:background="@drawable/circle_shadow"
+                    android:src="@drawable/ic_database"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Server Data"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img"
+                    android:textColor="@color/white"/>
 
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/sync_data"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:onClick="@{()-> activity.showPendingScreen()}"
+                android:background="@drawable/button_background_blue"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:id="@+id/img2"
+                    android:tint="@color/colorPrimary"
+                    android:padding="@dimen/_8sdp"
+                    android:background="@drawable/circle_shadow"
+                    android:src="@drawable/ic_upload"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sync Data"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img2"
+                    android:textColor="@color/white"/>
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
 </RelativeLayout>
 
             <TextView

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
+import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.adapter.PollingStationAdapter;
@@ -34,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class PollingStationList extends AppCompatActivity implements MyDialog.myOnClickListener, Api.ServerResponseListener, View.OnClickListener {
@@ -47,6 +50,7 @@ public class PollingStationList extends AppCompatActivity implements MyDialog.my
     public static SQLiteDatabase db;
     private RecyclerView recyclerView;
     private PollingStationAdapter adapter;
+    public dbData dbData = new dbData(this);
     ArrayList<ElectionProject> electionProjects = new ArrayList<>();
 
     @Override
@@ -84,9 +88,52 @@ public class PollingStationList extends AppCompatActivity implements MyDialog.my
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
+        dbData.open();
+        electionProjects = new ArrayList<>();
+        electionProjects=dbData.getAll_PollingStationList();
 
+/*
+        Collections.sort(electionProjects, new Comparator<ElectionProject>() {
+            public int compare(ElectionProject lhs, ElectionProject rhs) {
+                return Integer.parseInt(lhs.getPolling_station_no()) - Integer.parseInt(rhs.getPolling_station_no());
+            }
+        });
+*/
         adapter = new PollingStationAdapter(PollingStationList.this, electionProjects);
         recyclerView.setAdapter(adapter);
+    }
+
+
+    public void updateUnCheckStatus(ArrayList<ElectionProject> electionList, int position){
+        electionProjects = new ArrayList<>();
+        electionProjects = new ArrayList<ElectionProject>(electionList);
+        electionProjects.get(position).setSave_status("No");
+        electionProjects.get(position).setIsChecked_status("No");
+        electionProjects.get(position).setUnChecked_status("No");
+        adapter.notifyDataSetChanged();
+    }
+    public void updateYesStatus(ArrayList<ElectionProject> electionList, int position){
+        electionProjects = new ArrayList<>();
+        electionProjects = new ArrayList<ElectionProject>(electionList);
+        electionProjects.get(position).setSave_status("No");
+        electionProjects.get(position).setIsChecked_status("Yes");
+        electionProjects.get(position).setUnChecked_status("No");
+        adapter.notifyDataSetChanged();
+    }
+    public void updateNoStatus(ArrayList<ElectionProject> electionList, int position){
+        electionProjects = new ArrayList<>();
+        electionProjects = new ArrayList<ElectionProject>(electionList);
+        electionProjects.get(position).setSave_status("No");
+        electionProjects.get(position).setIsChecked_status("No");
+        electionProjects.get(position).setUnChecked_status("Yes");
+        adapter.notifyDataSetChanged();
+    }
+    public void remarkStatus(ArrayList<ElectionProject> electionList, int position, String remark){
+        electionProjects = new ArrayList<>();
+        electionProjects = new ArrayList<ElectionProject>(electionList);
+        electionProjects.get(position).setSave_status("No");
+        electionProjects.get(position).setGet_remark_text(remark);
+        adapter.notifyDataSetChanged();
     }
 
     public void showHomeScreen() {

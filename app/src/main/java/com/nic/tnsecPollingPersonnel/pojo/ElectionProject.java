@@ -26,6 +26,118 @@ public class ElectionProject  {
     private String polling_booth_id;
     private String activity_remark;
 
+    private String save_status;
+    private String isChecked_status;
+    private String unChecked_status;
+    private String yes_no;
+    private String get_remark_text;
+
+    private String ro_level_id;
+    private String lb_type;
+    private String lbpolling_station_no;
+    private String activity_name;
+    private String activity_type_name;
+    private String activity_status;
+
+    public String getActivity_type_name() {
+        return activity_type_name;
+    }
+
+    public ElectionProject setActivity_type_name(String activity_type_name) {
+        this.activity_type_name = activity_type_name;
+        return this;
+    }
+
+    public String getActivity_status() {
+        return activity_status;
+    }
+
+    public ElectionProject setActivity_status(String activity_status) {
+        this.activity_status = activity_status;
+        return this;
+    }
+
+    public String getActivity_name() {
+        return activity_name;
+    }
+
+    public ElectionProject setActivity_name(String activity_name) {
+        this.activity_name = activity_name;
+        return this;
+    }
+
+    public String getLbpolling_station_no() {
+        return lbpolling_station_no;
+    }
+
+    public ElectionProject setLbpolling_station_no(String lbpolling_station_no) {
+        this.lbpolling_station_no = lbpolling_station_no;
+        return this;
+    }
+
+    public String getLb_type() {
+        return lb_type;
+    }
+
+    public ElectionProject setLb_type(String lb_type) {
+        this.lb_type = lb_type;
+        return this;
+    }
+
+    public String getRo_level_id() {
+        return ro_level_id;
+    }
+
+    public ElectionProject setRo_level_id(String ro_level_id) {
+        this.ro_level_id = ro_level_id;
+        return this;
+    }
+
+    public String getGet_remark_text() {
+        return get_remark_text;
+    }
+
+    public ElectionProject setGet_remark_text(String get_remark_text) {
+        this.get_remark_text = get_remark_text;
+        return this;
+    }
+
+    public String getYes_no() {
+        return yes_no;
+    }
+
+    public ElectionProject setYes_no(String yes_no) {
+        this.yes_no = yes_no;
+        return this;
+    }
+
+    public String getSave_status() {
+        return save_status;
+    }
+
+    public ElectionProject setSave_status(String save_status) {
+        this.save_status = save_status;
+        return this;
+    }
+
+    public String getIsChecked_status() {
+        return isChecked_status;
+    }
+
+    public ElectionProject setIsChecked_status(String isChecked_status) {
+        this.isChecked_status = isChecked_status;
+        return this;
+    }
+
+    public String getUnChecked_status() {
+        return unChecked_status;
+    }
+
+    public ElectionProject setUnChecked_status(String unChecked_status) {
+        this.unChecked_status = unChecked_status;
+        return this;
+    }
+
     public String getActivity_type() {
         return activity_type;
     }

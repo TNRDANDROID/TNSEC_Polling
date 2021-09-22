@@ -306,9 +306,6 @@ public class Utils {
         return dir.delete();
     }
 
-    public static void imageAnimation(){
-
-    }
     public static JSONObject ActivityTypeListParams(Activity activity) throws JSONException {
         prefManager = new PrefManager(activity);
         JSONObject dataSet = new JSONObject();
@@ -330,10 +327,10 @@ public class Utils {
         Log.d("ActivityListParams", "" + dataSet);
         return dataSet;
     }
-    public static JSONObject serverDataListJsonParams() throws JSONException {
+    public static JSONObject pollingListJsonParams() throws JSONException {
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SERVER_DATA);
-        Log.d("serverListJsonParams", "" + dataSet);
+        Log.d("polling_booth_Params", "" + dataSet);
         return dataSet;
     }
 

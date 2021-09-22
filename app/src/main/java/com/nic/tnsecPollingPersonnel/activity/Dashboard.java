@@ -32,6 +32,7 @@ import com.nic.tnsecPollingPersonnel.constant.AppConstant;
 import com.nic.tnsecPollingPersonnel.databinding.DashboardBinding;
 import com.nic.tnsecPollingPersonnel.dialog.MyDialog;
 import com.nic.tnsecPollingPersonnel.pojo.ElectionProject;
+import com.nic.tnsecPollingPersonnel.support.ProgressHUD;
 import com.nic.tnsecPollingPersonnel.utils.UrlGenerator;
 import com.nic.tnsecPollingPersonnel.utils.Utils;
 import org.json.JSONArray;
@@ -57,6 +58,8 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
     private List<ElectionProject> activityTypeOrdered = new ArrayList<>();
     private List<ElectionProject> activityList = new ArrayList<>();
     private List<ElectionProject> activityListOrdered = new ArrayList<>();
+
+    private ProgressHUD progressHUD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,7 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
                 }else {
                     prefManager.setActivityType("");
                     prefManager.setActivityId("");
+                    prefManager.setActivityName("");
                     dashboardBinding.activitySpinner.setSelection(0);
                     dashboardBinding.activitySpinner.setAdapter(null);
                 }
@@ -116,9 +120,12 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position > 0) {
                     String Activity_id = activityList.get(position).getActivity_id();
+                    String Activity_name = activityList.get(position).getActivity_description();
                     prefManager.setActivityId(Activity_id);
+                    prefManager.setActivityName(Activity_name);
                 }else {
                     prefManager.setActivityId("");
+                    prefManager.setActivityName("");
                 }
             }
 
@@ -127,9 +134,45 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
 
             }
         });
+        dashboardBinding.viewServerData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.isOnline()) {
+                    getPollingList();
+                } else {
+                    Utils.showAlert(Dashboard.this, "Your Internet seems to be Offline.Data can be viewed only in Online mode.");
+                }
+            }
+        });
 
         loadActivityTypeSpinner();
+        syncButtonVisibility();
 
+    }
+    public void getPollingList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("PollingList", Api.Method.POST, UrlGenerator.getMainServiceUrl(), PollingListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public JSONObject PollingListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.pollingListJsonParams().toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("PollingList", "" + dataSet);
+        return dataSet;
+    }
+
+    public void syncButtonVisibility(){
+        dbData.open();
+        if(dbData.getSavedDetails().size()!=0){
+            dashboardBinding.syncData.setVisibility(View.VISIBLE);
+        }
+        else {
+            dashboardBinding.syncData.setVisibility(View.GONE);
+        }
     }
     public void loadActivityListSpinner(String activity_type) {
         Cursor ActList = null;
@@ -227,9 +270,20 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
 
 
     public void showActivityScreen() {
-        Intent intent = new Intent(Dashboard.this, PollingStationList.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.fleft, R.anim.fhelper);
+        if ((dashboardBinding.typeSpinner.getSelectedItem() != null) &&(!"Select Type".equalsIgnoreCase(activityType.get(dashboardBinding.typeSpinner.getSelectedItemPosition()).getActivity_type_desc()))
+                && (activityType.get(dashboardBinding.typeSpinner.getSelectedItemPosition()).getActivity_type_desc() != null)){
+            if ((dashboardBinding.activitySpinner.getSelectedItem() != null) &&(!"Select Activity".equalsIgnoreCase(activityList.get(dashboardBinding.activitySpinner.getSelectedItemPosition()).getActivity_description()))
+                    && (activityList.get(dashboardBinding.activitySpinner.getSelectedItemPosition()).getActivity_description() != null)){
+                Intent intent = new Intent(Dashboard.this, PollingStationList.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fleft, R.anim.fhelper);
+            }else{
+                Utils.showAlert(Dashboard.this,"Select Activity! ");
+            }
+        }
+        else{
+            Utils.showAlert(Dashboard.this,"Select Type! ");
+        }
     }
     public void showPendingScreen() {
         Intent intent = new Intent(Dashboard.this, PendingListActivity.class);
@@ -237,7 +291,11 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         overridePendingTransition(R.anim.fleft, R.anim.fhelper);
     }
 
-
+    private void dataFromServer() {
+        Intent intent = new Intent(this, ViewServerDataScreen.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
 
 
     @Override
@@ -298,14 +356,14 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         try {
             String urlType = serverResponse.getApi();
             JSONObject responseObj = serverResponse.getJsonResponse();
-            if ("ActivityTypeList".equals(urlType) && responseObj != null) {
+            if ("PollingList".equals(urlType) && responseObj != null) {
                 String key = responseObj.getString(AppConstant.ENCODE_DATA);
                 String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-
+                    new InsertPollingListTask().execute(jsonObject);
                 }
-                Log.d("ActivityTypeListRes", "" + responseDecryptedBlockKey);
+                Log.d("PollingListRes", "" + responseDecryptedBlockKey);
             }
 
         } catch (JSONException e) {
@@ -314,6 +372,68 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
     }
 
 
+    public class InsertPollingListTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.deleteSavedPollingStationList();
+            dbData.open();
+            ArrayList<ElectionProject> all_kvvtListCount = dbData.getAll_ServerList();
+            if (all_kvvtListCount.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ElectionProject viewServerListData = new ElectionProject();
+                        try {
+                            viewServerListData.setActivity_by(jsonArray.getJSONObject(i).getString("activity_by"));
+                            viewServerListData.setRo_zone_id(jsonArray.getJSONObject(i).getString("ro_zone_id"));
+                            viewServerListData.setRo_level_id(jsonArray.getJSONObject(i).getString("ro_level_id"));
+                            viewServerListData.setDcode(jsonArray.getJSONObject(i).getString("dcode"));
+                            viewServerListData.setBcode(jsonArray.getJSONObject(i).getString("bcode"));
+                            viewServerListData.setLb_type(jsonArray.getJSONObject(i).getString("lb_type"));
+                            viewServerListData.setPolling_booth_id(jsonArray.getJSONObject(i).getString("polling_booth_id"));
+                            viewServerListData.setActivity_id(jsonArray.getJSONObject(i).getString("activity_id"));
+                            viewServerListData.setActivity_remark(jsonArray.getJSONObject(i).getString("activity_remark"));
+                            viewServerListData.setLbpolling_station_no(jsonArray.getJSONObject(i).getString("lbpolling_station_no"));
+                            viewServerListData.setPolling_booth_name(jsonArray.getJSONObject(i).getString("polling_booth_name"));
+                            viewServerListData.setLlpolling_booth_name(jsonArray.getJSONObject(i).getString("llpolling_booth_name"));
+                            viewServerListData.setPvname(jsonArray.getJSONObject(i).getString("pvname"));
+                            viewServerListData.setActivity_name(jsonArray.getJSONObject(i).getString("activity_name"));
+                            viewServerListData.setActivity_type(jsonArray.getJSONObject(i).getString("activity_type_id"));
+                            viewServerListData.setActivity_type_name(jsonArray.getJSONObject(i).getString("activity_type_name"));
+                            viewServerListData.setActivity_status(jsonArray.getJSONObject(i).getString("activity_status"));
+                            dbData.insertViewServerData(viewServerListData);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressHUD = ProgressHUD.show(Dashboard.this, "Downloading", true, false, null);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressHUD!=null){
+                progressHUD.cancel();
+            }
+            dataFromServer();
+
+        }
+    }
 
     @Override
     public void OnError(VolleyError volleyError) {
@@ -337,5 +457,10 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncButtonVisibility();
+    }
 
 }

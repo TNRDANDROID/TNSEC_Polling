@@ -165,11 +165,11 @@ public LoginScreenBinding loginScreenBinding;
     }
 
     public void checkLoginScreen() {
-        /*loginScreenBinding.username.setText("ppdekpm01");
-        loginScreenBinding.password.setText("test123#$");*/
-
-        loginScreenBinding.username.setText("zpvelgthm7");
+        loginScreenBinding.username.setText("zpkpmkdtr1");
         loginScreenBinding.password.setText("test123#$");
+
+        /*loginScreenBinding.username.setText("zpvelgthm7");
+        loginScreenBinding.password.setText("test123#$");*/
 
         final String username = loginScreenBinding.username.getText().toString().trim();
         final String password = loginScreenBinding.password.getText().toString().trim();
@@ -311,7 +311,7 @@ public LoginScreenBinding loginScreenBinding;
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
                     new InsertPollingStationListTask().execute(jsonObject);
                 }
-                Log.d("ActivityListRes", "" + responseDecryptedBlockKey);
+                Log.d("PollingStationList", "" + responseDecryptedBlockKey);
             }
 
 
@@ -450,11 +450,20 @@ public LoginScreenBinding loginScreenBinding;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         ElectionProject ListValue = new ElectionProject();
                         try {
-                            ListValue.setActivity_id(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_ID));
-                            ListValue.setActivity_description(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_DESCRIPTION));
-                            ListValue.setActivity_by(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_BY));
-                            ListValue.setActivity_type(jsonArray.getJSONObject(i).getString(AppConstant.ACTIVITY_TYPE));
-                            dbData.insertActivityList(ListValue);
+                            ListValue.setPolling_station_no(jsonArray.getJSONObject(i).getString(AppConstant.LPOLLING_STATION_NO));
+                            ListValue.setPolling_booth_name(jsonArray.getJSONObject(i).getString(AppConstant.POLLING_BOOTH_NAME));
+                            ListValue.setPolling_booth_id(jsonArray.getJSONObject(i).getString(AppConstant.POLLING_BOOTH_ID));
+                            ListValue.setDcode(jsonArray.getJSONObject(i).getString(AppConstant.DISTRICT_CODE));
+                            ListValue.setBcode(jsonArray.getJSONObject(i).getString(AppConstant.BLOCK_CODE));
+                            ListValue.setPvcode(jsonArray.getJSONObject(i).getString(AppConstant.PV_CODE));
+                            ListValue.setPvname(jsonArray.getJSONObject(i).getString(AppConstant.PV_NAME));
+                            ListValue.setLlpolling_booth_name(jsonArray.getJSONObject(i).getString(AppConstant.LLPOLLING_BOOTH_NAME));
+                            ListValue.setSave_status("No");
+                            ListValue.setIsChecked_status("No");
+                            ListValue.setUnChecked_status("No");
+                            ListValue.setGet_remark_text("");
+
+                            dbData.insertPollingStationList(ListValue);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

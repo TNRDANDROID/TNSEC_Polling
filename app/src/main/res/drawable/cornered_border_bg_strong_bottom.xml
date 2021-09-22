@@ -78,7 +78,12 @@
     <!-- Background -->
     <item>
         <shape>
-            <solid android:color="@color/colorPrimary"/>
+            <!--<solid android:color="@color/colorPrimary"/>-->
+            <gradient
+                android:angle="180"
+                android:endColor="@color/colorPrimary"
+                android:startColor="@color/purplelite" />
+
             <corners android:topRightRadius="0dp"
                 android:topLeftRadius="0dp"
                 android:bottomLeftRadius="10dp"

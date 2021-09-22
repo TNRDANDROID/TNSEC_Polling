@@ -33,11 +33,35 @@
                     android:layout_marginTop="0dp"
                     android:padding="@dimen/_15sdp"
                     android:id="@+id/polling_station_no"
-                    android:text="Polling Station No : 345345"
+                    android:text="Polling Station No : 346546"
                     android:gravity="center_vertical"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
                     android:visibility="visible" />
+<!--
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toLeftOf="@+id/save"
+                    android:background="@drawable/circle_shadow"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/edit"
+                    android:src="@drawable/ic_edit"
+                    />
+-->
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/circle_shadow"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/save"
+                    android:src="@drawable/ic_unchecked"
+                    />
 
             </RelativeLayout>
             <RelativeLayout
@@ -69,9 +93,44 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Village : "
+                                    android:layout_alignParentStart="true"
+                                    android:id="@+id/polling_station_no_h"
+                                    android:textColor="@color/grey_9"
+                                    android:textSize="@dimen/_15sdp"
+                                    android:visibility="visible" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/pvname"
+                                    android:text="Village"
+                                    android:layout_toLeftOf="@+id/edit"
+                                    android:layout_toRightOf="@+id/polling_station_no_h"
+                                    android:textColor="@color/grey_9"
+                                    android:textSize="@dimen/_15sdp"
+                                    android:visibility="visible" />
+                                    <ImageView
+                                        android:layout_width="@dimen/_20sdp"
+                                        android:layout_height="@dimen/_20sdp"
+                                        android:layout_gravity="end"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_marginStart="8dp"
+                                        android:id="@+id/edit"
+                                        android:tint="@color/grey_9"
+                                        android:src="@drawable/edit"
+                                        />
+
+                                </RelativeLayout>
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_8sdp"
                                     android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -147,7 +206,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layout_marginTop="@dimen/_4sdp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -252,6 +311,7 @@
                                             android:padding="@dimen/_5sdp"
                                             android:maxLines="5"
                                             android:singleLine="false"
+                                            android:imeOptions="actionDone"
                                             android:background="@android:color/transparent"
                                             android:hint="Enter Remark"
                                             android:inputType="textMultiLine"
@@ -330,17 +390,25 @@
 
                             </RelativeLayout>
 -->
+<!--
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_10sdp">
+    <ImageView
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_gravity="end"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/circle_shadow"
+        android:layout_centerVertical="true"
+        android:id="@+id/save"
+        android:src="@drawable/ic_unchecked"
+         />
+</RelativeLayout>
+-->
 
 
-                            <ImageView
-                                android:layout_width="@dimen/_30sdp"
-                                android:layout_height="@dimen/_30sdp"
-                                android:layout_gravity="end"
-                                android:background="@drawable/circle_shadow"
-                                android:layout_centerHorizontal="true"
-                                android:id="@+id/save"
-                                android:src="@drawable/ic_unchecked"
-                                android:layout_marginTop="@dimen/_10sdp" />
 
 
                         </LinearLayout>

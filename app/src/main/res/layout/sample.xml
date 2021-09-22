@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Master Medal-->
+    <RelativeLayout
+        android:id="@+id/re_master_medal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cornered_bg_colored_circle_top">
+
+        <ImageView
+            android:id="@+id/img_integral_shop"
+            android:layout_width="48dp"
+            android:layout_height="66dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/log_out" />
+
+        <TextView
+            android:id="@+id/tv_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_integral_shop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="stair"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_intro"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="note"
+            android:textColor="@color/white" />
+
+        <FrameLayout
+            android:id="@+id/onAirLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true">
+
+            <!-- Attention Please -->
+            <!--layout_width must be equal to layout_height and its value plus layout_marginBottom must be equal 85-->
+            <!--PS: 85 is the height of placeholder image-->
+            <View
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="top|right|end"
+                android:layout_marginBottom="-30dp"
+                android:background="@drawable/triangle"
+                android:rotation="0" />
+
+            <TextView
+                android:id="@+id/txtOnAir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|end"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:rotation="45"
+                android:text="Yes"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+        </FrameLayout>
+    </RelativeLayout>
+
+</layout>

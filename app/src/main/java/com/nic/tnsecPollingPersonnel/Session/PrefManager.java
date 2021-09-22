@@ -40,6 +40,7 @@ public class PrefManager {
     public static final String SERVER_DATA_LIST = "ServerDataList";
     public static final String ACTIVITY_TYPE = "activity_type";
     public static final String ACTIVITY_ID = "activity_id";
+    public static final String ACTIVITY_NAME = "activity_name";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -108,6 +109,14 @@ public class PrefManager {
 
     public String getActivityId() {
         return pref.getString(ACTIVITY_ID, null);
+    }
+    public void setActivityName(String activityName) {
+        editor.putString(ACTIVITY_NAME, activityName);
+        editor.commit();
+    }
+
+    public String getActivityName() {
+        return pref.getString(ACTIVITY_NAME, null);
     }
 
 
