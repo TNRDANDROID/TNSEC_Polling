@@ -21,7 +21,7 @@
             android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_button_white_shadow"
+            android:background="@drawable/round_button_white_shadow_with_gradient"
             android:id="@+id/activity_type_layout">
 
             <RelativeLayout

@@ -27,6 +27,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/left3">
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:tint="@color/purplelite"
+                    android:id="@+id/img"
+                    android:layout_below="@+id/activity_name"
+                    android:src="@drawable/play_cornered"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginTop="-10dp"
+                   />
                 <TextView
                     android:id="@+id/activity_name"
                     android:layout_width="match_parent"
@@ -42,16 +52,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
                     style="@string/font_circular_bold" />
-                <ImageView
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:tint="@color/purplelite"
-                    android:id="@+id/img"
-                    android:layout_below="@+id/activity_name"
-                    android:src="@drawable/play_cornered"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginTop="-8dp"
-                   />
 
             </RelativeLayout>
 

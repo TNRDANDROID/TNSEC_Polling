@@ -174,7 +174,7 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
     }
     public void loadActivityListSpinner(String activity_type) {
         Cursor ActList = null;
-        ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description asc", null);
+        ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description desc", null);
 
         activityArrayList.clear();
 
@@ -198,7 +198,7 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
             Log.d("activityListsize", "" + activityArrayList.size());
 
         }
-        Collections.sort(activityArrayList, (lhs, rhs) -> lhs.getActivity_description().compareTo(rhs.getActivity_description()));
+//        Collections.sort(activityArrayList, (lhs, rhs) -> lhs.getActivity_description().compareTo(rhs.getActivity_description()));
 
         if(activityArrayList.size() > 0) {
             viewServerDataScreenBinding.activityListLayout.setVisibility(View.VISIBLE);

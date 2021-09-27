@@ -14,6 +14,7 @@ import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.activity.Dashboard;
 import com.nic.tnsecPollingPersonnel.activity.ViewServerDataScreen;
 import com.nic.tnsecPollingPersonnel.databinding.ActivityTypeAdapterBinding;
+import com.nic.tnsecPollingPersonnel.databinding.ActivityTypeAdapterServerBinding;
 import com.nic.tnsecPollingPersonnel.pojo.ElectionProject;
 
 import java.util.ArrayList;
@@ -38,17 +39,17 @@ public class ActivityTypeAdapterForServerData extends RecyclerView.Adapter<Activ
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
-        ActivityTypeAdapterBinding activityTypeAdapterBinding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.activity_type_adapter, viewGroup, false);
+        ActivityTypeAdapterServerBinding activityTypeAdapterBinding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.activity_type_adapter_server, viewGroup, false);
         return new ActivityTypeAdapterForServerData.MyViewHolder(activityTypeAdapterBinding);
 
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private ActivityTypeAdapterBinding activityTypeAdapterBinding;
+        private ActivityTypeAdapterServerBinding activityTypeAdapterBinding;
 
-        public MyViewHolder(ActivityTypeAdapterBinding Binding) {
+        public MyViewHolder(ActivityTypeAdapterServerBinding Binding) {
             super(Binding.getRoot());
             activityTypeAdapterBinding = Binding;
         }
