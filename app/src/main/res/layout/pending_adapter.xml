@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/pvname"
+                    android:layout_toLeftOf="@+id/img"
                     android:layout_marginEnd="10dp"
                     android:id="@+id/polling_station_no"
                     android:text="636546"
@@ -59,6 +60,16 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
                     android:visibility="visible" />
+                <ImageView
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:id="@+id/delete"
+                    android:tint="@color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="@dimen/_6sdp"
+                    android:src="@drawable/ic_delete"/>
 
             </RelativeLayout>
             <RelativeLayout

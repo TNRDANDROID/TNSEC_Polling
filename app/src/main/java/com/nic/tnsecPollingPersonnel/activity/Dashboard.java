@@ -14,16 +14,23 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.VolleyError;
 import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
 import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityListAdapter;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityTypeAdapter;
 import com.nic.tnsecPollingPersonnel.adapter.CommonAdapter;
 import com.nic.tnsecPollingPersonnel.api.Api;
 import com.nic.tnsecPollingPersonnel.api.ApiService;
@@ -54,12 +61,18 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
     public static DBHelper dbHelper;
     public static SQLiteDatabase db;
     public dbData dbData = new dbData(this);
+    private ArrayList<ElectionProject> activityTypeList = new ArrayList<>();
+    private ArrayList<ElectionProject> activityArrayList = new ArrayList<>();
     private List<ElectionProject> activityType = new ArrayList<>();
     private List<ElectionProject> activityTypeOrdered = new ArrayList<>();
     private List<ElectionProject> activityList = new ArrayList<>();
     private List<ElectionProject> activityListOrdered = new ArrayList<>();
 
     private ProgressHUD progressHUD;
+    private RecyclerView recyclerActivityType;
+    private RecyclerView recyclerActivityList;
+    private ActivityTypeAdapter activityTypeAdapter;
+    private ActivityListAdapter activityListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +104,16 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         anim.setDuration(1000);
         anim.setRepeatMode(Animation.INFINITE);
         anim.setRepeatCount(Animation.INFINITE);
+
+        recyclerActivityType = dashboardBinding.activityTypeList;
+        recyclerActivityType.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerActivityType.setItemAnimator(new DefaultItemAnimator());
+        recyclerActivityType.setNestedScrollingEnabled(false);
+
+        recyclerActivityList = dashboardBinding.activityList;
+        recyclerActivityList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        recyclerActivityList.setItemAnimator(new DefaultItemAnimator());
+        recyclerActivityList.setNestedScrollingEnabled(false);
 
         dashboardBinding.name.setText(prefManager.getZonalPartyName());
         dashboardBinding.typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -178,6 +201,45 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         Cursor ActList = null;
         ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description asc", null);
 
+        activityArrayList.clear();
+
+        if (ActList.getCount() > 0) {
+            if (ActList.moveToFirst()) {
+                do {
+                    ElectionProject list = new ElectionProject();
+                    String ACTIVITY_ID = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_ID));
+                    String ACTIVITY_DESCRIPTION = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_DESCRIPTION));
+                    String ACTIVITY_BY = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_BY));
+                    String ACTIVITY_TYPE = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE));
+
+                    list.setActivity_id(ACTIVITY_ID);
+                    list.setActivity_description(ACTIVITY_DESCRIPTION);
+                    list.setActivity_by(ACTIVITY_BY);
+                    list.setActivity_type(ACTIVITY_TYPE);
+
+                    activityArrayList.add(list);
+                } while (ActList.moveToNext());
+            }
+            Log.d("activityListsize", "" + activityArrayList.size());
+
+        }
+        Collections.sort(activityArrayList, (lhs, rhs) -> lhs.getActivity_description().compareTo(rhs.getActivity_description()));
+
+        if(activityArrayList.size() > 0) {
+            activityListAdapter = new ActivityListAdapter(Dashboard.this, activityArrayList);
+            recyclerActivityList.setAdapter(activityListAdapter);
+            recyclerActivityList.scheduleLayoutAnimation();
+
+        }else {
+
+        }
+    }
+
+/*
+    public void loadActivityListSpinner(String activity_type) {
+        Cursor ActList = null;
+        ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description asc", null);
+
         activityList.clear();
         activityListOrdered.clear();
 
@@ -221,7 +283,42 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         }
         dashboardBinding.activitySpinner.setAdapter(new CommonAdapter(this, activityList, "activityList"));
     }
+*/
 
+    public void loadActivityTypeSpinner() {
+        Cursor TypeList = null;
+        TypeList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_TYPE_LIST , null);
+
+        activityTypeList.clear();
+
+        if (TypeList.getCount() > 0) {
+            if (TypeList.moveToFirst()) {
+                do {
+                    ElectionProject list = new ElectionProject();
+                    String ACTIVITY_TYPE = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE));
+                    String ACTIVITY_TYPE_DESC = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE_DESC));
+                    String DISPLAY_ORDER = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.DISPLAY_ORDER));
+
+                    list.setActivity_type(ACTIVITY_TYPE);
+                    list.setActivity_type_desc(ACTIVITY_TYPE_DESC);
+                    list.setDisplay_order(DISPLAY_ORDER);
+
+                    activityTypeList.add(list);
+                } while (TypeList.moveToNext());
+            }
+            Log.d("activityTypespinnersize", "" + activityTypeList.size());
+
+        }
+        Collections.sort(activityTypeList, (lhs, rhs) -> lhs.getActivity_type_desc().compareTo(rhs.getActivity_type_desc()));
+        if(activityTypeList.size() > 0) {
+            activityTypeAdapter = new ActivityTypeAdapter(Dashboard.this, activityTypeList);
+            recyclerActivityType.setAdapter(activityTypeAdapter);
+            recyclerActivityType.scrollToPosition(0);
+        }else {
+
+        }
+    }
+/*
     public void loadActivityTypeSpinner() {
         Cursor TypeList = null;
         TypeList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_TYPE_LIST , null);
@@ -265,6 +362,7 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         }
         dashboardBinding.typeSpinner.setAdapter(new CommonAdapter(this, activityType, "activityTypeList"));
     }
+*/
 
 
 
@@ -274,9 +372,7 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
                 && (activityType.get(dashboardBinding.typeSpinner.getSelectedItemPosition()).getActivity_type_desc() != null)){
             if ((dashboardBinding.activitySpinner.getSelectedItem() != null) &&(!"Select Activity".equalsIgnoreCase(activityList.get(dashboardBinding.activitySpinner.getSelectedItemPosition()).getActivity_description()))
                     && (activityList.get(dashboardBinding.activitySpinner.getSelectedItemPosition()).getActivity_description() != null)){
-                Intent intent = new Intent(Dashboard.this, PollingStationList.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fleft, R.anim.fhelper);
+                showPollingActivityScreen();
             }else{
                 Utils.showAlert(Dashboard.this,"Select Activity! ");
             }
@@ -284,6 +380,11 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
         else{
             Utils.showAlert(Dashboard.this,"Select Type! ");
         }
+    }
+    public void showPollingActivityScreen() {
+        Intent intent = new Intent(Dashboard.this, PollingStationList.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fleft, R.anim.fhelper);
     }
     public void showPendingScreen() {
         Intent intent = new Intent(Dashboard.this, PendingListActivity.class);

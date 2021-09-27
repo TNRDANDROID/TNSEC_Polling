@@ -287,7 +287,7 @@ public class PollingStationAdapter extends RecyclerView.Adapter<PollingStationAd
         values.put(AppConstant.ACTIVITY_REMARK, activity_remark);
         values.put(AppConstant.ACTIVITY_STATUS, activity_status);
         values.put(AppConstant.POLLING_BOOTH_NAME, polling_booth_name);
-        if (Utils.isOnline()) {
+        if (!Utils.isOnline()) {
             JSONObject dataSet = new JSONObject();
             try {
                 dataSet.put("service_id", AppConstant.ZP_POLLING_BOOTH_SAVE);

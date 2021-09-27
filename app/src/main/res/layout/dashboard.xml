@@ -88,21 +88,16 @@
         </com.google.android.material.appbar.AppBarLayout>
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/padding"
     android:id="@+id/details_layout"
     android:layout_below="@+id/app_bar"
     android:layout_above="@+id/text">
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
+            android:layout_above="@+id/btn_layout"
             android:layout_gravity="center_horizontal"
             android:gravity="center">
             <RelativeLayout
@@ -137,13 +132,13 @@
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/left2">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="Ro Name"
                         android:layout_centerVertical="true"
                         android:id="@+id/name"
@@ -170,6 +165,7 @@
                     android:id="@+id/spinner_layout"
                     android:paddingBottom="@dimen/_20sdp"
                     android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
                     android:gravity="center">
 
                     <RelativeLayout
@@ -266,13 +262,42 @@
 
 
                 </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/activity_type_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fadeScrollbars="false"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:scrollbarSize="0dp"
+                        android:scrollbars="horizontal"
+                        android:visibility="visible"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/activity_list"
+                        android:layout_below="@+id/activity_type_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadeScrollbars="false"
+                        android:paddingTop="@dimen/_15sdp"
+                        android:paddingLeft="@dimen/_15sdp"
+                        android:paddingRight="@dimen/_15sdp"
+                        android:scrollbarSize="0dp"
+                        android:layoutAnimation="@anim/layout_animation"
+                        android:scrollbars="horizontal"
+                        android:visibility="visible"/>
 
+
+                </RelativeLayout>
             </RelativeLayout>
 
 
         </RelativeLayout>
 
-    </androidx.core.widget.NestedScrollView>
 <!--
     <RelativeLayout
         android:id="@+id/save_data"
@@ -326,7 +351,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:padding="5dp"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:id="@+id/btn_layout"
+        android:layout_marginTop="5dp"
         android:elevation="3dp"
         android:visibility="visible">
         <LinearLayout
@@ -354,7 +380,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Server Data"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_2sdp"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/_15sdp"
                     android:layout_centerVertical="true"
@@ -383,7 +411,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sync Data"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_2sdp"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/_15sdp"
                     android:layout_centerVertical="true"

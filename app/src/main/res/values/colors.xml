@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <!-- <color name="colorPrimary">#943855</color>
-    <color name="colorPrimaryDark">#943855</color>
-    <color name="colorAccent">#b9466a</color>-->
-    <!-- <color name="colorPrimary">#0189ff</color>
-    <color name="colorPrimaryDark">#6867E9</color>
-    <color name="colorAccent">#0189ff</color>-->
-
 
      <color name="colorPrimary">#5431a5</color>
-    <color name="colorPrimaryDark">#5431a5</color>6867E9
+    <color name="colorPrimaryDark">#5431a5</color>
     <color name="colorAccent">#6545AE</color>
     <color name="colorAccentLite">#EFECF6</color>
     <color name="colorPrimaryLite">#6867E9</color>
+    <color name="colorPrimaryLite2">#5C33F6</color>
+
+   <!--<color name="colorPrimary">#591FCE</color>
+    <color name="colorPrimaryDark">#5431a5</color>
+    <color name="colorAccent">#6545AE</color>
+    <color name="colorAccentLite">#EFECF6</color>
+    <color name="colorPrimaryLite">#6867E9</color>
+    <color name="colorPrimaryLite2">#5C33F6</color>-->
+
+ <!-- <color name="colorPrimary">#943855</color>
+    <color name="colorPrimaryDark">#943855</color>
+    <color name="colorAccent">#b9466a</color>-->
+ <!-- <color name="colorPrimary">#0189ff</color>
+ <color name="colorPrimaryDark">#6867E9</color>
+ <color name="colorAccent">#0189ff</color>-->
+
  <!--<color name="colorPrimary">#01b6c3</color>
     <color name="colorPrimaryDark">#01b6c3</color>6867E9
     <color name="colorAccent">#02cedc</color>-->
@@ -26,8 +35,14 @@
     <color name="lightgray">#ededed</color>
     <color name="purple">#9A0F98</color>
     <color name="purple2">#AE52CF</color>
-    <color name="purplelite">#C327AB</color>
-    <color name="purple_very_lite">#F3D3EE</color>
+
+<!--    <color name="purplelite">#C327AB</color>-->
+ <color name="purplelite">#A239EA</color>
+<!-- <color name="purplelite">#FF9C27B0</color>-->
+<!-- <color name="purplelite">#12B9CB</color>-->
+<!-- <color name="purplelite">#28C7FA</color>-->
+
+ <color name="purple_very_lite">#F3D3EE</color>
     <color name="deeppurple">#7c4dff</color>
     <color name="yello">#ffb300</color>
     <color name="green">#00bfa5</color>

@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
 import com.nic.tnsecPollingPersonnel.activity.PendingListActivity;
@@ -32,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.nic.tnsecPollingPersonnel.activity.Dashboard.db;
 
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHolder> {
 
@@ -98,6 +101,20 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
           @Override
           public void onClick(View view) {
               uploadData(position);
+          }
+      });
+      holder.pendingAdapterBinding.delete.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+
+              db.delete(DBHelper.SAVE_DATA,"polling_booth_id = ? and activity_id = ? and activity_type = ? "
+                      ,new String[] {projectList.get(position).getPolling_booth_id()
+                              ,projectList.get(position).getActivity_id(),
+                              projectList.get(position).getActivity_type()});
+              projectList.remove(position);
+              notifyItemRemoved(position);
+              notifyItemRangeChanged(position,projectList.size());
+              ((PendingListActivity) context).loadPendingList();
           }
       });
 

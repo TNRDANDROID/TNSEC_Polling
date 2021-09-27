@@ -19,6 +19,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
@@ -27,7 +28,10 @@ import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
 import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
 import com.nic.tnsecPollingPersonnel.Session.PrefManager;
-import com.nic.tnsecPollingPersonnel.adapter.CommonAdapter;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityListAdapter;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityListAdapterForServerData;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityTypeAdapter;
+import com.nic.tnsecPollingPersonnel.adapter.ActivityTypeAdapterForServerData;
 import com.nic.tnsecPollingPersonnel.adapter.ViewServerDataListAdapter;
 import com.nic.tnsecPollingPersonnel.api.Api;
 import com.nic.tnsecPollingPersonnel.api.ServerResponse;
@@ -47,7 +51,8 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
     private SearchView searchView;
     private PrefManager prefManager;
     String pref_Village;
-
+    private ArrayList<ElectionProject> activityTypeList = new ArrayList<>();
+    private ArrayList<ElectionProject> activityArrayList = new ArrayList<>();
     private List<ElectionProject> activityType = new ArrayList<>();
     private List<ElectionProject> activityTypeOrdered = new ArrayList<>();
     private List<ElectionProject> activityList = new ArrayList<>();
@@ -55,7 +60,10 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
 
     public static SQLiteDatabase db;
     public static DBHelper dbHelper;
-
+    private RecyclerView recyclerActivityType;
+    private RecyclerView recyclerActivityList;
+    private ActivityTypeAdapterForServerData activityTypeAdapter;
+    private ActivityListAdapterForServerData activityListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +81,9 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
         setSupportActionBar(viewServerDataScreenBinding.toolbar);
         initRecyclerView();
 
+        viewServerDataScreenBinding.activityListLayout.setVisibility(View.GONE);
+        viewServerDataScreenBinding.serverActivityLayout.setVisibility(View.GONE);
+        viewServerDataScreenBinding.activityTv.setText("Activity List");
         viewServerDataScreenBinding.serverDataList.setVisibility(View.GONE);
         viewServerDataScreenBinding.notFoundTv.setVisibility(View.GONE);
         viewServerDataScreenBinding.typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -117,11 +128,91 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
 
             }
         });
+        viewServerDataScreenBinding.goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewServerDataScreenBinding.activityListLayout.setVisibility(View.VISIBLE);
+                viewServerDataScreenBinding.serverActivityLayout.setVisibility(View.GONE);
+                viewServerDataScreenBinding.activityTv.setText("Activity List");
+            }
+        });
         loadActivityTypeSpinner();
     }
 
+    public void loadActivityTypeSpinner() {
+        Cursor TypeList = null;
+        TypeList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_TYPE_LIST , null);
 
+        activityTypeList.clear();
+
+        if (TypeList.getCount() > 0) {
+            if (TypeList.moveToFirst()) {
+                do {
+                    ElectionProject list = new ElectionProject();
+                    String ACTIVITY_TYPE = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE));
+                    String ACTIVITY_TYPE_DESC = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE_DESC));
+                    String DISPLAY_ORDER = TypeList.getString(TypeList.getColumnIndexOrThrow(AppConstant.DISPLAY_ORDER));
+
+                    list.setActivity_type(ACTIVITY_TYPE);
+                    list.setActivity_type_desc(ACTIVITY_TYPE_DESC);
+                    list.setDisplay_order(DISPLAY_ORDER);
+
+                    activityTypeList.add(list);
+                } while (TypeList.moveToNext());
+            }
+            Log.d("activityTypespinnersize", "" + activityTypeList.size());
+
+        }
+        Collections.sort(activityTypeList, (lhs, rhs) -> lhs.getActivity_type_desc().compareTo(rhs.getActivity_type_desc()));
+        if(activityTypeList.size() > 0) {
+            activityTypeAdapter = new ActivityTypeAdapterForServerData(ViewServerDataScreen.this, activityTypeList);
+            recyclerActivityType.setAdapter(activityTypeAdapter);
+            recyclerActivityType.scrollToPosition(0);
+        }else {
+
+        }
+    }
     public void loadActivityListSpinner(String activity_type) {
+        Cursor ActList = null;
+        ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description asc", null);
+
+        activityArrayList.clear();
+
+        if (ActList.getCount() > 0) {
+            if (ActList.moveToFirst()) {
+                do {
+                    ElectionProject list = new ElectionProject();
+                    String ACTIVITY_ID = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_ID));
+                    String ACTIVITY_DESCRIPTION = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_DESCRIPTION));
+                    String ACTIVITY_BY = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_BY));
+                    String ACTIVITY_TYPE = ActList.getString(ActList.getColumnIndexOrThrow(AppConstant.ACTIVITY_TYPE));
+
+                    list.setActivity_id(ACTIVITY_ID);
+                    list.setActivity_description(ACTIVITY_DESCRIPTION);
+                    list.setActivity_by(ACTIVITY_BY);
+                    list.setActivity_type(ACTIVITY_TYPE);
+
+                    activityArrayList.add(list);
+                } while (ActList.moveToNext());
+            }
+            Log.d("activityListsize", "" + activityArrayList.size());
+
+        }
+        Collections.sort(activityArrayList, (lhs, rhs) -> lhs.getActivity_description().compareTo(rhs.getActivity_description()));
+
+        if(activityArrayList.size() > 0) {
+            viewServerDataScreenBinding.activityListLayout.setVisibility(View.VISIBLE);
+            viewServerDataScreenBinding.serverActivityLayout.setVisibility(View.GONE);
+            viewServerDataScreenBinding.activityTv.setText("Activity List");
+            activityListAdapter = new ActivityListAdapterForServerData(ViewServerDataScreen.this, activityArrayList);
+            recyclerActivityList.setAdapter(activityListAdapter);
+            recyclerActivityList.scheduleLayoutAnimation();
+
+        }else {
+
+        }    }
+
+    /*public void loadActivityListSpinner(String activity_type) {
         Cursor ActList = null;
         ActList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_LIST + " where activity_type = '" + activity_type + "'order by activity_description asc", null);
 
@@ -167,8 +258,9 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
             activityList.add(habList);
         }
         viewServerDataScreenBinding.activityList.setAdapter(new CommonAdapter(this, activityList, "activityList"));
-    }
+    }*/
 
+   /*
     public void loadActivityTypeSpinner() {
         Cursor TypeList = null;
         TypeList = db.rawQuery("SELECT * FROM " + DBHelper.ACTIVITY_TYPE_LIST , null);
@@ -194,7 +286,7 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
             Log.d("activityTypespinnersize", "" + activityTypeOrdered.size());
 
         }
-        Collections.sort(activityTypeOrdered, (lhs, rhs) -> lhs.getActivity_type_desc().compareTo(rhs.getActivity_type_desc()));
+        Collections.sort(activityTypeOrdered, (lhs, rhs) -> lhs.getActivity_type().compareTo(rhs.getActivity_type()));
         ElectionProject ListValue = new ElectionProject();
         ListValue.setActivity_type_desc("Select Type");
         activityType.add(ListValue);
@@ -212,6 +304,7 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
         }
         viewServerDataScreenBinding.typeSpinner.setAdapter(new CommonAdapter(this, activityType, "activityTypeList"));
     }
+   */
 
     private void initRecyclerView() {
         recyclerView = viewServerDataScreenBinding.serverDataList;
@@ -219,8 +312,20 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-    }
 
+        recyclerActivityType = viewServerDataScreenBinding.activityTypeList;
+        recyclerActivityType.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerActivityType.setItemAnimator(new DefaultItemAnimator());
+        recyclerActivityType.setNestedScrollingEnabled(false);
+
+        recyclerActivityList = viewServerDataScreenBinding.activityListVal;
+        recyclerActivityList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        recyclerActivityList.setItemAnimator(new DefaultItemAnimator());
+        recyclerActivityList.setNestedScrollingEnabled(false);
+    }
+    public void getServerList() {
+        new fetchScheduletask().execute();
+    }
     public class fetchScheduletask extends AsyncTask<Void, Void,
             ArrayList<ElectionProject>> {
         @Override
@@ -238,6 +343,9 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
 
             viewServerDataListAdapter = new ViewServerDataListAdapter(ViewServerDataScreen.this, savedList);
             if (savedList.size() > 0) {
+                viewServerDataScreenBinding.activityListLayout.setVisibility(View.GONE);
+                viewServerDataScreenBinding.serverActivityLayout.setVisibility(View.VISIBLE);
+                viewServerDataScreenBinding.activityTv.setText(prefManager.getActivityName());
                 recyclerView.setVisibility(View.VISIBLE);
                 viewServerDataScreenBinding.notFoundTv.setVisibility(View.GONE);
                 recyclerView.setAdapter(viewServerDataListAdapter);
@@ -249,6 +357,9 @@ public class ViewServerDataScreen extends AppCompatActivity implements Api.Serve
                     }
                 }, 1000);
             } else {
+                viewServerDataScreenBinding.activityListLayout.setVisibility(View.GONE);
+                viewServerDataScreenBinding.serverActivityLayout.setVisibility(View.VISIBLE);
+                viewServerDataScreenBinding.activityTv.setText(prefManager.getActivityName());
                 recyclerView.setVisibility(View.GONE);
                 viewServerDataScreenBinding.notFoundTv.setVisibility(View.VISIBLE);
             }

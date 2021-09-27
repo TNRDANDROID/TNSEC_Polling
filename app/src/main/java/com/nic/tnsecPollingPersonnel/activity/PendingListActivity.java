@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.nic.tnsecPollingPersonnel.DataBase.DBHelper;
 import com.nic.tnsecPollingPersonnel.DataBase.dbData;
 import com.nic.tnsecPollingPersonnel.R;
@@ -99,8 +100,11 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-
         dbData.open();
+        loadPendingList();
+    }
+
+    public void loadPendingList() {
         electionProjects = new ArrayList<>();
         electionProjects.addAll(dbData.getSavedDetails());
 /*
@@ -110,8 +114,21 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
             }
         });
 */
-        adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
-        recyclerView.setAdapter(adapter);
+        if(electionProjects.size() > 0) {
+            recyclerView.setVisibility(View.VISIBLE);
+            pendingScreenBinding.notFoundTv.setVisibility(View.GONE);
+            pendingScreenBinding.gifImageView.setVisibility(View.GONE);
+            adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
+            recyclerView.setAdapter(adapter);
+        }else {
+            recyclerView.setVisibility(View.GONE);
+            pendingScreenBinding.notFoundTv.setVisibility(View.VISIBLE);
+            pendingScreenBinding.gifImageView.setVisibility(View.VISIBLE);
+            Glide
+                    .with(this)
+                    .load(R.drawable.no_data)
+                    .into(pendingScreenBinding.gifImageView);
+        }
     }
 
     public void showHomeScreen() {
@@ -197,17 +214,7 @@ public class PendingListActivity extends AppCompatActivity implements MyDialog.m
                     Utils.showAlert(this,"Successfully Uploaded");
                     db.delete(DBHelper.SAVE_DATA,"polling_booth_id = ? and activity_id = ? and activity_type = ? "
                             ,new String[] {polling_booth_id,activity_id,activity_type});
-                    electionProjects = new ArrayList<>();
-                    electionProjects.addAll(dbData.getSavedDetails());
-/*
-                    Collections.sort(electionProjects, new Comparator<ElectionProject>() {
-                        public int compare(ElectionProject lhs, ElectionProject rhs) {
-                            return Integer.parseInt(lhs.getPolling_station_no()) - Integer.parseInt(rhs.getPolling_station_no());
-                        }
-                    });
-*/
-                    adapter = new PendingAdapter(PendingListActivity.this, electionProjects);
-                    recyclerView.setAdapter(adapter);
+                    loadPendingList();
                     adapter.notifyDataSetChanged();
                 }else {
                     Utils.showAlert(this,jsonObject.getString("MESSAGE"));

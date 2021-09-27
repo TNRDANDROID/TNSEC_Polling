@@ -88,21 +88,22 @@ public class PollingStationList extends AppCompatActivity implements MyDialog.my
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
+        loadPollingStationList();
+    }
+    public void loadPollingStationList(){
         dbData.open();
         electionProjects = new ArrayList<>();
         electionProjects=dbData.getAll_PollingStationList();
-
-/*
-        Collections.sort(electionProjects, new Comparator<ElectionProject>() {
-            public int compare(ElectionProject lhs, ElectionProject rhs) {
-                return Integer.parseInt(lhs.getPolling_station_no()) - Integer.parseInt(rhs.getPolling_station_no());
-            }
-        });
-*/
-        adapter = new PollingStationAdapter(PollingStationList.this, electionProjects);
-        recyclerView.setAdapter(adapter);
+        if(electionProjects.size() > 0) {
+            recyclerView.setVisibility(View.VISIBLE);
+            pollingStationListBinding.notFoundTv.setVisibility(View.GONE);
+            adapter = new PollingStationAdapter(PollingStationList.this, electionProjects);
+            recyclerView.setAdapter(adapter);
+        }else {
+            recyclerView.setVisibility(View.GONE);
+            pollingStationListBinding.notFoundTv.setVisibility(View.VISIBLE);
+        }
     }
-
 
     public void updateUnCheckStatus(ArrayList<ElectionProject> electionList, int position){
         electionProjects = new ArrayList<>();
@@ -126,13 +127,6 @@ public class PollingStationList extends AppCompatActivity implements MyDialog.my
         electionProjects.get(position).setSave_status("No");
         electionProjects.get(position).setIsChecked_status("No");
         electionProjects.get(position).setUnChecked_status("Yes");
-        adapter.notifyDataSetChanged();
-    }
-    public void remarkStatus(ArrayList<ElectionProject> electionList, int position, String remark){
-        electionProjects = new ArrayList<>();
-        electionProjects = new ArrayList<ElectionProject>(electionList);
-        electionProjects.get(position).setSave_status("No");
-        electionProjects.get(position).setGet_remark_text(remark);
         adapter.notifyDataSetChanged();
     }
 
