@@ -151,11 +151,70 @@
                 </RelativeLayout>
 
             </RelativeLayout>
+           <!-- <RelativeLayout
+                android:id="@+id/relative2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="0dp">
+
+                <RelativeLayout
+                    android:id="@+id/imgUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/circle_shadow_all_side"
+                    >
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_margin="5dp"
+                        android:layout_centerInParent="true"
+                        android:padding="3dp"
+                        android:tint="@color/colorPrimary"
+                        android:src="@drawable/usernamebg"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/name_layout"
+                    android:layout_toRightOf="@+id/imgUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    >
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Zonal"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_15sdp" />
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_below="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Name"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_16sdp" />
+
+
+            </RelativeLayout>
+            </RelativeLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:id="@id/relative3"
                 android:background="@drawable/cornered_bg_colored_circle_top"
                 android:layout_below="@+id/relative2">

@@ -314,6 +314,14 @@ public class Dashboard extends AppCompatActivity implements MyDialog.myOnClickLi
             activityTypeAdapter = new ActivityTypeAdapter(Dashboard.this, activityTypeList);
             recyclerActivityType.setAdapter(activityTypeAdapter);
             recyclerActivityType.scrollToPosition(0);
+            recyclerActivityType.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerActivityType.findViewHolderForAdapterPosition(1).itemView.performClick();
+
+                }
+            },50);
+
         }else {
 
         }

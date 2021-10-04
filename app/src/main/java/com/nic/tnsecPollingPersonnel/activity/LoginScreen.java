@@ -165,10 +165,10 @@ public LoginScreenBinding loginScreenBinding;
     }
 
     public void checkLoginScreen() {
-        loginScreenBinding.username.setText("zpkpmkdtr1");
+        loginScreenBinding.username.setText("zpkpmkdtr1"); // loc
         loginScreenBinding.password.setText("test123#$");
 
-        /*loginScreenBinding.username.setText("zpvelgthm7");
+        /*loginScreenBinding.username.setText("zpvelgthm7"); //prod
         loginScreenBinding.password.setText("test123#$");*/
 
         final String username = loginScreenBinding.username.getText().toString().trim();

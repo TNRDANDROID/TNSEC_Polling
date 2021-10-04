@@ -60,7 +60,7 @@ public class ActivityTypeAdapterForServerData extends RecyclerView.Adapter<Activ
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
       holder.activityTypeAdapterBinding.activityType.setText(projectList.get(position).getActivity_type_desc());
         holder.activityTypeAdapterBinding.activityType.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-        holder.activityTypeAdapterBinding.activityTypeLayout.setBackground(context.getResources().getDrawable(R.drawable.round_button_white_shadow));
+        holder.activityTypeAdapterBinding.activityTypeLayout.setBackground(context.getResources().getDrawable(R.drawable.round_button_white_shadow_with_gradient));
 
       holder.itemView.setOnClickListener(new View.OnClickListener() {
           @Override
